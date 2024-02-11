@@ -115,7 +115,7 @@ function(declare,
 			var array = [];
 			array.push(DndRowMoveCopy);
 			array.push(DndFromDesktopAddDoc);
-			array.push(RowContextMenu);
+//			array.push(RowContextMenu);
 			return array;
 		},
 
@@ -131,43 +131,8 @@ function(declare,
 			if (ecm.model.desktop.showViewFilmstrip) {
 				viewModules.push(ViewFilmStrip);
 			}
-
-			
 			var array = [];
-	        // Define a new column for checkboxes if not already defined
-	        var checkboxColumn = {
-	            field: '_item',
-	            label: 'Select',
-	            renderCell: function(object, value, node) {
-	                var checkBox = domConstruct.create("input", {
-	                    type: "checkbox",
-	                    onclick: function() {
-	                        // Implement your selection logic here
-	                        console.log("Checkbox for item clicked", object);
-	                    }
-	                });
-	                domConstruct.place(checkBox, node);
-	            }
-	        }
 			array.push(DocInfo);
-			array.push({
-				moduleClass: Bar,
-				
-				top: [
-					[
-						[
-							{
-								moduleClass: Toolbar
-							},
-							{
-								moduleClasses: viewModules,
-								"className": "BarViewModules"
-							},
-
-						]
-					]
-				]
-			});
 			console.log("array", array)
 			return array;
 		},

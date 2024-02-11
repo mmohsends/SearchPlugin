@@ -52,5 +52,9 @@ define({
 	DOC_NAME: "اسم الوثيقه",
 	DOC_CLASS: "تصنيف الوثيقه",
 	CREATED_BY: "منشأ الوثيقه",
+	PLEASE_SELECT_ONE_DOC: "!الرجاء تحديد وثيقه واحدة عالأقل",
+	OBJ_CREATED_DOC: "XX تم انشاء وثيقه",
+	OBJ_DELETED_DOC: "XX تم حذف وثيقه"
+
 
 });

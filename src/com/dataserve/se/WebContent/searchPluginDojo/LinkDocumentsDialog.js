@@ -136,15 +136,22 @@ define([ "dojo/_base/declare",
 			this.linkBtn = new Button({
 				label : linkLabel,
 				onClick : lang.hitch(this, function() {
-					for (let i=0;i<this.searchResultObj.searchResults.getSelectedItems().length;i++){
-						let documentId = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.ID
-						documentId = documentId.replace("{", "").replace("}","")
-						let documentClass = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.className
-						let createdBy = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.Creator
-						let documentName = this.searchResultObj.searchResults.getSelectedItems()[i].name
-						let mainDocId = this.args.docGuid
-						this.addLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
+					if(this.searchResultObj.searchResults.getSelectedItems().length == 0){
+						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+					}else{
+						for (let i=0;i<this.searchResultObj.searchResults.getSelectedItems().length;i++){
+							let documentId = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.ID
+							documentId = documentId.replace("{", "").replace("}","")
+							let documentClass = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.className
+							let createdBy = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.Creator
+							let documentName = this.searchResultObj.searchResults.getSelectedItems()[i].name
+							let mainDocId = this.args.docGuid
+							this.addLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
+							
+						}
 					}
+					this.grid.destroy();
+					this.LinkedDocument();
 
 				}),
 			});
@@ -153,20 +160,29 @@ define([ "dojo/_base/declare",
 			this.removeBtn = new Button({
 				label : deleteLabel,
 				onClick : lang.hitch(this, function() {
-					for (let i=0;i<this.grid.selection.getSelected().length;i++){
-						let documentId = this.grid.selection.getSelected()[0].documentId[0]
-						let documentClass = this.grid.selection.getSelected()[0].documentClass[0]
-						let createdBy = this.grid.selection.getSelected()[0].createdBy[0]
-						let documentName = this.grid.selection.getSelected()[0].documentName[0]
-						let mainDocId = this.grid.selection.getSelected()[0].mainDocId[0]
-						this.deleteLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
+					var gridSelect = this.grid.selection.getSelected()
+					if(gridSelect.length == 0){
+						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+					}else{
+						for (let i=0;i<gridSelect.length;i++){
+							let documentId = gridSelect[i].documentId[0]
+							let documentClass = gridSelect[i].documentClass[0]
+							let createdBy = gridSelect[i].createdBy[0]
+							let documentName = gridSelect[i].documentName[0]
+							let mainDocId = gridSelect[i].mainDocId[0]
+							this.deleteLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
+						}
+						
 					}
+					this.grid.destroy();
+					this.LinkedDocument();
+
 				}),
 				
 			});
 			
-  		    this.gridDiv.addChild(this.linkBtn);
-  		    this.gridDiv.addChild(this.removeBtn);
+  		    this.gridBtn.addChild(this.linkBtn);
+  		    this.gridBtn.addChild(this.removeBtn);
 
 			
 		},
@@ -181,16 +197,15 @@ define([ "dojo/_base/declare",
 		    var store = new dojo.data.ItemFileWriteStore({ data: data });
 
 		    var layout = [
-	            {'name': 'ID', 'field': 'id'},
-		        { name: this._lcl.DOC_NAME, field: 'documentName', width: '230px' },
-		        { name: this._lcl.DOC_CLASS, field: 'documentClass', width: '230px' },
-		        { name: this._lcl.CREATED_BY, field: 'createdBy', width: '230px' },
+		        { name: this._lcl.DOC_NAME, field: 'documentName', width: '33.3%' },
+		        { name: this._lcl.DOC_CLASS, field: 'documentClass', width: '33.3%' },
+		        { name: this._lcl.CREATED_BY, field: 'createdBy', width: '33.3%' },
 		    ];
 
 		    this.grid = new dojox.grid.EnhancedGrid({
 		        store: store,
 		        structure: layout,
-		        style: 'width: 100%; height: 100px;',
+		        style: 'width: 100%; height: 100%;',
 		        rowSelector: '20px',
 		        plugins: {
 		            indirectSelection: {
@@ -235,7 +250,7 @@ define([ "dojo/_base/declare",
  			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
  			var resultSet = new ResultSet(response);
  			if(!resultSet.result.startsWith("ERROR")){
- 				this.toaster.greenToaster("XX has been created successfully".replace("XX", this._lcl.Link_Documents));
+ 				this.toaster.greenToaster(this._lcl.OBJ_CREATED_DOC.replace("XX", this._lcl.Link_Documents));
  			} else {
  				if (resultSet.result.includes("(ACCESS DENIED)")) {
  					this.toaster.redToaster(lcl.ACCESS_DENIED);						
@@ -296,7 +311,7 @@ define([ "dojo/_base/declare",
   	 			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
   	 			var resultSet = new ResultSet(response);
   	 			if(!resultSet.result.startsWith("ERROR")){
-  	 				this.toaster.greenToaster("XX has been Deleted successfully".replace("XX", this._lcl.Link_Documents));
+  	 				this.toaster.greenToaster(this._lcl.OBJ_DELETED_DOC.replace("XX", this._lcl.Link_Documents));
   	 			} else {
   	 				if (resultSet.result.includes("(ACCESS DENIED)")) {
   	 					this.toaster.redToaster(lcl.ACCESS_DENIED);						
