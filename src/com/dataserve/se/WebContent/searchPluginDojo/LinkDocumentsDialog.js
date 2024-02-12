@@ -136,11 +136,7 @@ define([ "dojo/_base/declare",
 			this.linkBtn = new Button({
 				label : linkLabel,
 				onClick : lang.hitch(this, function() {
-					if(this.searchResultObj.searchResults.getSelectedItems().length == 0){
-						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
-					}else{
-							this.addLinkDocument();
-					}
+					this.addLinkDocument();
 					this.grid.destroy();
 					this.LinkedDocument();
 
@@ -151,11 +147,7 @@ define([ "dojo/_base/declare",
 			this.removeBtn = new Button({
 				label : deleteLabel,
 				onClick : lang.hitch(this, function() {
-					if(this.grid.selection.getSelected().length == 0){
-						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
-					}else{
-							this.deleteLinkDocument()
-						}
+					this.deleteLinkDocument()
 					this.grid.destroy();
 					this.LinkedDocument();
 
@@ -220,9 +212,14 @@ define([ "dojo/_base/declare",
 	  
 	  addLinkDocument: function(){
 		  var docs = this.searchResultObj.searchResults.getSelectedItems();
+		  if(docs.length == 0){
+				this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+				return "";
+			}else{
 		  var docInfo = docs.map(function(item){
   				return item.attributeDisplayValues;
 		  });
+			}
       	params = {
 				method: "AddLinkDocument",
           		"docInfo": JSON.stringify(docInfo),
@@ -283,9 +280,14 @@ define([ "dojo/_base/declare",
   		deleteLinkDocument: function(){
   			var item = []
 			var gridSelect = this.grid.selection.getSelected()
-			for (let i=0;i<gridSelect.length;i++){
+			if(this.grid.selection.getSelected().length == 0){
+				this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+				return "";
+			}else{
+				for (let i=0;i<gridSelect.length;i++){
 				item[i]={"mainDocId":gridSelect[i].mainDocId.toString(),"documentId":gridSelect[i].documentId.toString()}
-			}
+				}
+				}
 
   	      	params = {
   					method: "DeleteLinkDocument",
