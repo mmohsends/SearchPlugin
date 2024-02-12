@@ -139,16 +139,7 @@ define([ "dojo/_base/declare",
 					if(this.searchResultObj.searchResults.getSelectedItems().length == 0){
 						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
 					}else{
-						for (let i=0;i<this.searchResultObj.searchResults.getSelectedItems().length;i++){
-							let documentId = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.ID
-							documentId = documentId.replace("{", "").replace("}","")
-							let documentClass = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.className
-							let createdBy = this.searchResultObj.searchResults.getSelectedItems()[i].attributeDisplayValues.Creator
-							let documentName = this.searchResultObj.searchResults.getSelectedItems()[i].name
-							let mainDocId = this.args.docGuid
-							this.addLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
-							
-						}
+							this.addLinkDocument();
 					}
 					this.grid.destroy();
 					this.LinkedDocument();
@@ -160,20 +151,11 @@ define([ "dojo/_base/declare",
 			this.removeBtn = new Button({
 				label : deleteLabel,
 				onClick : lang.hitch(this, function() {
-					var gridSelect = this.grid.selection.getSelected()
-					if(gridSelect.length == 0){
+					if(this.grid.selection.getSelected().length == 0){
 						this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
 					}else{
-						for (let i=0;i<gridSelect.length;i++){
-							let documentId = gridSelect[i].documentId[0]
-							let documentClass = gridSelect[i].documentClass[0]
-							let createdBy = gridSelect[i].createdBy[0]
-							let documentName = gridSelect[i].documentName[0]
-							let mainDocId = gridSelect[i].mainDocId[0]
-							this.deleteLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId)
+							this.deleteLinkDocument()
 						}
-						
-					}
 					this.grid.destroy();
 					this.LinkedDocument();
 
@@ -236,15 +218,17 @@ define([ "dojo/_base/declare",
 
 	  },
 	  
-	  addLinkDocument: function(documentId, documentClass, createdBy, documentName, mainDocId){
-         		  
+	  addLinkDocument: function(){
+		  var docs = this.searchResultObj.searchResults.getSelectedItems();
+		  var docInfo = docs.map(function(item){
+  				return item.attributeDisplayValues;
+		  });
       	params = {
 				method: "AddLinkDocument",
-          		"documentId": documentId,
-          		"documentClass": documentClass,
-          		"createdBy": createdBy,
-          		"documentName":documentName,
-          		"mainDocId":mainDocId,	
+          		"docInfo": JSON.stringify(docInfo),
+				"mainDocId": this.args.docGuid,
+
+	
 			};
              
  			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
@@ -264,8 +248,7 @@ define([ "dojo/_base/declare",
  				console.log("User creation failed!");
  				console.log(resultSet);
  			}
-// 			this.destroyRecursive();
-//          this.hide();
+
 			        
   },
   
@@ -297,15 +280,17 @@ define([ "dojo/_base/declare",
 			return results;
   		},
   		
-  		deleteLinkDocument: function(documentId, documentClass, createdBy, documentName, mainDocId){
-   		  
+  		deleteLinkDocument: function(){
+  			var item = []
+			var gridSelect = this.grid.selection.getSelected()
+			for (let i=0;i<gridSelect.length;i++){
+				item[i]={"mainDocId":gridSelect[i].mainDocId.toString(),"documentId":gridSelect[i].documentId.toString()}
+			}
+
   	      	params = {
   					method: "DeleteLinkDocument",
-  	          		"documentId": documentId,
-  	          		"documentClass": documentClass,
-  	          		"createdBy": createdBy,
-  	          		"documentName":documentName,
-  	          		"mainDocId":mainDocId,	
+  	          		"gridData": JSON.stringify(item),
+	
   				};
   	             
   	 			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
@@ -325,8 +310,7 @@ define([ "dojo/_base/declare",
   	 				console.log("User creation failed!");
   	 				console.log(resultSet);
   	 			}
-//  	 			this.destroyRecursive();
-//  	          this.hide();
+
   				        
   	  },
 	  

@@ -14,6 +14,7 @@ import com.dataserve.se.permissions.Module;
 import com.dataserve.se.bean.LinkDocumentModel;
 import com.dataserve.se.db.command.CommandBase;
 import com.ibm.json.java.JSONArray;
+import com.ibm.json.java.JSONObject;
 
 public class AddLinkDocument extends CommandBase {
 	
@@ -24,15 +25,17 @@ public class AddLinkDocument extends CommandBase {
 	
 	public String execute() throws Exception {
 
-		String documentId = request.getParameter("documentId");
-		String documentClass = request.getParameter("documentClass");
-		String createdBy = request.getParameter("createdBy");
-		String documentName = request.getParameter("documentName");
 		String mainDocId = request.getParameter("mainDocId");
-		
+		JSONArray docInfo = JSONArray.parse(request.getParameter("docInfo"));
+		        
 		try {
-			LinkDocumentModel LM = new LinkDocumentModel(documentId, documentClass, createdBy, documentName, mainDocId);
+	        for (Object obj : docInfo) {
+	            JSONObject jsonObject = (JSONObject) obj;
+    			LinkDocumentModel LM = new LinkDocumentModel(jsonObject.get("ID").toString().replace("{", "").replace("}", ""), jsonObject.get("className").toString(), jsonObject.get("Creator").toString(), jsonObject.get("This").toString(), mainDocId);
 				LM.save();
+
+	        }
+
 				return "SUCCESS";
 		} 
 		catch (ClassificationException e) {

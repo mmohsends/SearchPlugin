@@ -15,32 +15,44 @@ import com.dataserve.se.db.DatabaseException;
 import com.dataserve.se.db.LinkDocumentDAO;
 import com.dataserve.se.db.command.CommandBase;
 import com.ibm.json.java.JSONArray;
+import com.ibm.json.java.JSONObject;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
 public class DeleteLinkDocument extends CommandBase{
 
-	private static final String String = null;
 
 	public DeleteLinkDocument(HttpServletRequest request) {
 		super(request);
 	}
 	public String execute() throws Exception {
+		JSONArray gridData = JSONArray.parse(request.getParameter("gridData"));
 
-		String documentId = request.getParameter("documentId");
-		String documentClass = request.getParameter("documentClass");
-		String createdBy = request.getParameter("createdBy");
-		String documentName = request.getParameter("documentName");
-		String mainDocId = request.getParameter("mainDocId");
+		int delete = 0;
 			try {
-				LinkDocumentDAO dao = new LinkDocumentDAO();			
-				int delete = dao.deleteLinkDocument(documentId, documentClass, createdBy, documentName, mainDocId);
-				return delete + "";
+				for (Object obj : gridData) {
+					JSONObject jsonObject = (JSONObject) obj;
+		            LinkDocumentDAO dao = new LinkDocumentDAO();			
+		            dao.deleteLinkDocument(jsonObject.get("documentId").toString(), jsonObject.get("mainDocId").toString());
+				}
+				return delete+"";
+
 					
 				} catch (DatabaseException e) {
-					throw new ClassificationException("Error getting Linked Document with Main Doc '" + mainDocId + "'", e);
-				}
+					throw new ClassificationException("Error getting Linked Document with Main Doc");
 			}
-
+	}
+    public static String decodeUnicode(String unicodeText) {
+        StringBuilder decodedText = new StringBuilder();
+        String[] codePoints = unicodeText.split("\\\\u");
+        for (String codePoint : codePoints) {
+            if (!codePoint.isEmpty()) {
+                int charValue = Integer.parseInt(codePoint, 16);
+                decodedText.append((char) charValue);
+            }
+        }
+        return decodedText.toString();
+        }
 	
 	
 		

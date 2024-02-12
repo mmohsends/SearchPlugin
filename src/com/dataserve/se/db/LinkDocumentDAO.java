@@ -75,21 +75,14 @@ public class LinkDocumentDAO extends AbstractDAO{
 		}
 	}
 	
-	public int deleteLinkDocument(String documentId, String documentClass, String createdBy, String documentName,String mainDocId) throws DatabaseException {
-		LinkDocumentBean bean = new LinkDocumentBean();
+	public int deleteLinkDocument(String documentId, String mainDocId) throws DatabaseException {
 		try {
 			stmt = con.prepareStatement(
 				    "DELETE FROM DMS_FILES_LINK " +
 				    "WHERE DOCUMENT_ID = ? " +
-				    "  AND DOCUMENT_CLASS = ? " +
-				    "  AND CREATED_BY = ? " +
-				    "  AND DOCUMENT_NAME = ? " +
 				    "  AND MAIN_DOC_ID = ?");
 				stmt.setString(1, documentId);
-				stmt.setString(2, documentClass);
-				stmt.setString(3, createdBy);
-				stmt.setString(4, documentName);
-				stmt.setString(5, mainDocId);
+				stmt.setString(2, mainDocId);
 				int rowsAffected = stmt.executeUpdate();
 				return rowsAffected;
 		} catch (SQLException e) {
