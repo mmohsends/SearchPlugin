@@ -13,6 +13,7 @@ import java.util.Set;
 import com.dataserve.se.bean.LinkDocumentBean;
 import com.dataserve.se.db.AbstractDAO;
 import com.dataserve.se.db.DatabaseException;
+import com.ibm.json.java.JSONObject;
 
 public class LinkDocumentDAO extends AbstractDAO{
 	public LinkDocumentDAO() throws DatabaseException {
@@ -21,33 +22,56 @@ public class LinkDocumentDAO extends AbstractDAO{
 	
 	public boolean addLinkDocument(LinkDocumentBean bean) throws DatabaseException {
 		try {
-			stmt = con.prepareStatement("INSERT INTO DMS_FILES_LINK (DOCUMENT_ID, DOCUMENT_CLASS, CREATED_BY, DOCUMENT_NAME, MAIN_DOC_ID) " +
-                    "SELECT ?, ?, ?, ?, ? " +
-                    "WHERE NOT EXISTS (SELECT 1 " +
-                    "                  FROM DMS_FILES_LINK " +
-                    "                  WHERE DOCUMENT_ID = ? " +
-                    "                    AND DOCUMENT_CLASS = ? " +
-                    "                    AND CREATED_BY = ? " +
-                    "                    AND DOCUMENT_NAME = ? " +
-                    "                    AND MAIN_DOC_ID = ?)");
+			LinkDocumentBean linkDocumentBeanParent = fetchLinkByDocumentId(bean.getMainDocId());
+			for(Object obj: bean.getChilDocumentList()) {
+				String childDocId = obj.toString().replace("{", "").replace("}", "");
+				LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(childDocId);
+				System.out.println("linkDocumentBeanParent.getFileId(): "+linkDocumentBeanParent.getFileId());
+				System.out.println("linkDocumentChild.getFileId(): "+linkDocumentChild.getFileId());
+				
+				stmt = con.prepareStatement("INSERT INTO DMS_FILES_LINKS (FILE_ID, CHILD_FILE_ID) " +
+	                    "SELECT ?, ?" +
+	                    "WHERE NOT EXISTS (SELECT 1 " +
+	                    "                  FROM DMS_FILES_LINKS " +
+	                    "                  WHERE FILE_ID = ? " +
+	                    "                    AND CHILD_FILE_ID = ?)");
 
-			stmt.setNString(1, bean.getDocumentId());
-			stmt.setNString(2, bean.getDocumentClass());
-			stmt.setNString(3, bean.getCreatedBy());
-			stmt.setNString(4, bean.getDocumentName());
-			stmt.setNString(5, bean.getMainDocId());
-			stmt.setNString(6, bean.getDocumentId());
-			stmt.setNString(7, bean.getDocumentClass());
-			stmt.setNString(8, bean.getCreatedBy());
-			stmt.setNString(9, bean.getDocumentName());
-			stmt.setNString(10, bean.getMainDocId());
-            return stmt.execute();
+				stmt.setInt(1, linkDocumentBeanParent.getFileId());
+				stmt.setInt(2, linkDocumentChild.getFileId());
+				stmt.setInt(3,  linkDocumentBeanParent.getFileId());
+				stmt.setInt(4, linkDocumentChild.getFileId());
+	            return stmt.execute();
+			}
+			
+            return true;
         } catch (SQLException e) {
             throw new DatabaseException("Error adding new record to table CLASSIFICTIONS", e);
         } finally {
             safeClose();
             releaseResources();
         }
+	}
+	
+	public LinkDocumentBean fetchLinkByDocumentId(String DocId) throws DatabaseException {
+		try {
+			stmt = con.prepareStatement("SELECT * from DMS_FILES where DMS_FILES.DOCUMENT_ID = ?");
+			stmt.setString(1, DocId);	
+			rs = stmt.executeQuery();
+			System.out.println("after excuteQuery");
+			if (rs.next()) {
+                LinkDocumentBean bean = new LinkDocumentBean();
+                bean.setDocumentId(rs.getString("DOCUMENT_ID"));
+                bean.setFileId(rs.getInt("FILE_ID"));
+                return bean; // Return the bean directly
+            } else {
+                return null; // Return null if no record is found
+            }
+		} catch (SQLException e) {
+			throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
+		} finally {
+			safeClose();
+			releaseResources();
+		}
 	}
 	
 	public Set<LinkDocumentBean> fetchLinkDocument(String mainDocId) throws DatabaseException {

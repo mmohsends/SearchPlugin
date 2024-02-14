@@ -29,12 +29,9 @@ public class AddLinkDocument extends CommandBase {
 		JSONArray docInfo = JSONArray.parse(request.getParameter("docInfo"));
 		        
 		try {
-	        for (Object obj : docInfo) {
-	            JSONObject jsonObject = (JSONObject) obj;
-    			LinkDocumentModel LM = new LinkDocumentModel(jsonObject.get("ID").toString().replace("{", "").replace("}", ""), jsonObject.get("className").toString(), jsonObject.get("Creator").toString(), jsonObject.get("This").toString(), mainDocId);
+//    			LinkDocumentModel LM = new LinkDocumentModel(jsonObject.get("ID").toString().replace("{", "").replace("}", ""), jsonObject.get("className").toString(), jsonObject.get("Creator").toString(), jsonObject.get("This").toString(), mainDocId);
+    			LinkDocumentModel LM = new LinkDocumentModel(docInfo, mainDocId);
 				LM.save();
-
-	        }
 
 				return "SUCCESS";
 		} 

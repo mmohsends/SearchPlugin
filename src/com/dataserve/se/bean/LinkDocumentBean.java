@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 public class LinkDocumentBean extends AbstractBean {
 	
@@ -13,7 +14,8 @@ public class LinkDocumentBean extends AbstractBean {
 	private String DocumentName ;
 	private String MainDocId ;
 	private Set<Integer> childrenIds;
-
+	private Integer FileId;
+	private JSONArray ChilDocumentList;
 
 
 
@@ -29,6 +31,13 @@ public String getDocumentClass() {
 }
 public void setDocumentClass(String documentClass) {
 	DocumentClass = documentClass;
+}
+
+public int getFileId() {
+	return FileId;
+}
+public void setFileId(int fileId) {
+	FileId = fileId;
 }
 
 public String getCreatedBy() {
@@ -57,6 +66,12 @@ public Set<Integer> getChildrenIds() {
 }
 public void setChildrenIds(Set<Integer> childrenIds) {
 	this.childrenIds = childrenIds;
+}
+public JSONArray getChilDocumentList() {
+	return ChilDocumentList;
+}
+public void setChilDocumentList(JSONArray chilDocumentList) {
+	ChilDocumentList = chilDocumentList;
 }
 
 }

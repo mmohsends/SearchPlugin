@@ -35,6 +35,14 @@ public class LinkDocumentModel {
 				this.bean = bean;
 			}
 			
+			public LinkDocumentModel(JSONArray chilDocumentList, String mainDocId)throws DatabaseException {
+				LinkDocumentBean bean = new LinkDocumentBean();
+				bean.setChilDocumentList(chilDocumentList);
+				bean.setMainDocId(mainDocId);
+			
+				this.bean = bean;
+			}
+			
 			public static Set<LinkDocumentModel> getLinkDocument(String mainDocId) throws ClassificationException {
 				try {
 					LinkDocumentDAO dao = new LinkDocumentDAO();			

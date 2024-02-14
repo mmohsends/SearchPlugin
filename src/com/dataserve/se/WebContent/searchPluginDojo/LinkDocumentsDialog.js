@@ -214,12 +214,13 @@ define([ "dojo/_base/declare",
 		  var docs = this.searchResultObj.searchResults.getSelectedItems();
 		  if(docs.length == 0){
 				this.toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
-				return "";
 			}else{
 		  var docInfo = docs.map(function(item){
-  				return item.attributeDisplayValues;
+			  	return item.attributeDisplayValues.ID;
 		  });
-			}
+		  }
+		  console.log("docInfo: ",docInfo)
+		  console.log("docInfo: ",JSON.stringify(docInfo))
       	params = {
 				method: "AddLinkDocument",
           		"docInfo": JSON.stringify(docInfo),
