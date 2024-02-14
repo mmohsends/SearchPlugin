@@ -23,8 +23,10 @@ public class LinkDocumentDAO extends AbstractDAO{
 	public boolean addLinkDocument(LinkDocumentBean bean) throws DatabaseException {
 		try {
 			LinkDocumentBean linkDocumentBeanParent = fetchLinkByDocumentId(bean.getMainDocId());
+			System.out.println("linkDocumentBeanParent: "+linkDocumentBeanParent.getFileId());
 			for(Object obj: bean.getChilDocumentList()) {
 				String childDocId = obj.toString().replace("{", "").replace("}", "");
+				System.out.println("childDocId:"+childDocId);
 				LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(childDocId);
 				System.out.println("linkDocumentBeanParent.getFileId(): "+linkDocumentBeanParent.getFileId());
 				System.out.println("linkDocumentChild.getFileId(): "+linkDocumentChild.getFileId());
@@ -38,7 +40,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 
 				stmt.setInt(1, linkDocumentBeanParent.getFileId());
 				stmt.setInt(2, linkDocumentChild.getFileId());
-				stmt.setInt(3,  linkDocumentBeanParent.getFileId());
+				stmt.setInt(3, linkDocumentBeanParent.getFileId());
 				stmt.setInt(4, linkDocumentChild.getFileId());
 	            return stmt.execute();
 			}
