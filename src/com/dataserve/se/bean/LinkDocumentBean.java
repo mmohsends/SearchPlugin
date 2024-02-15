@@ -12,6 +12,7 @@ public class LinkDocumentBean extends AbstractBean {
 	private String DocumentClass ;
 	private String CreatedBy;
 	private String DocumentName ;
+	private String DocumentNameAr ;
 	private String MainDocId ;
 	private Set<Integer> childrenIds;
 	private Integer FileId;
@@ -55,6 +56,7 @@ public void setDocumentName(String documentName) {
 	DocumentName = documentName;
 }
 
+
 public String getMainDocId() {
 	return MainDocId;
 }
@@ -79,6 +81,12 @@ public Integer getChildFileId() {
 }
 public void setChildFileId(int childFileId) {
 	this.childFileId = childFileId;
+}
+public String getDocumentNameAr() {
+	return DocumentNameAr;
+}
+public void setDocumentNameAr(String documentNameAr) {
+	DocumentNameAr = documentNameAr;
 }
 
 }

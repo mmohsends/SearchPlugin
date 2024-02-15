@@ -81,23 +81,33 @@ public class LinkDocumentDAO extends AbstractDAO{
 	public Set<LinkDocumentBean> fetchLinkDocument(String mainDocId) throws DatabaseException {
 	    try {
 	        LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(mainDocId);
+	        System.out.println("linkDocumentChild from get: " + linkDocumentChild.getFileId());
 
-	        stmt = con.prepareStatement("SELECT FILE_ID, CHILD_FILE_ID " +
-	                "FROM DMS_FILES_LINKS WHERE FILE_ID = ?");
-	        stmt.setInt(1, linkDocumentChild.getFileId());    
+	        String sql = "SELECT CHILD_FILE_ID, DOCUMENT_CLASS, DOCUMENT_NAME, CLASS_AR_NAME " +
+	                     "FROM DMS_FILES_LINKS " +
+	                     "LEFT JOIN DMS_FILES ON DMS_FILES_LINKS.CHILD_FILE_ID = DMS_FILES.FILE_ID " +
+	                     "LEFT JOIN CLASSIFICTIONS ON DMS_FILES.DOCUMENT_CLASS = CLASSIFICTIONS.SYMPOLIC_NAME " +
+	                     "WHERE DMS_FILES_LINKS.FILE_ID = ?";
+
+	        stmt = con.prepareStatement(sql);
+	        stmt.setInt(1, linkDocumentChild.getFileId());
 	        rs = stmt.executeQuery();
-	        Set<LinkDocumentBean> beans = new LinkedHashSet<LinkDocumentBean>();            
+
+	        Set<LinkDocumentBean> beans = new LinkedHashSet<>();
+
 	        while (rs.next()) {
 	            LinkDocumentBean bean = new LinkDocumentBean();
-	            bean.setFileId(rs.getInt("FILE_ID"));
 	            bean.setChildFileId(rs.getInt("CHILD_FILE_ID"));
-
+	            bean.setDocumentClass(rs.getString("DOCUMENT_CLASS"));
+	            bean.setDocumentName(rs.getString("DOCUMENT_NAME"));
+	            bean.setDocumentNameAr(rs.getString("CLASS_AR_NAME"));
 	            beans.add(bean);
 	        }
-	        System.out.println("bean " + beans);
+
+	        System.out.println("beans: " + beans);
 	        return beans;
 	    } catch (SQLException e) {
-	        throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
+	        throw new DatabaseException("Error fetching link documents", e);
 	    } finally {
 	        safeClose();
 	        releaseResources();

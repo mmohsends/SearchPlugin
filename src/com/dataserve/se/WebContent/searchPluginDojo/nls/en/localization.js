@@ -48,11 +48,12 @@ define({
 	DELETE: "Delete",
 	OBJECT_SAVED_SUCCESSFULLY: "XX has been created successfully",
 	DOC_NAME: "Document Name",
+	DOC_NAME_AR:"Document Name Ar",
 	DOC_CLASS: "Document Class",
 	CREATED_BY: "Created by",
 	PLEASE_SELECT_ONE_DOC: "Please select one document at least!",
 	OBJ_CREATED_DOC: "XX has been created successfully",
-	OBJ_DELETED_DOC: "XX has been deleted successfully"
+	OBJ_DELETED_DOC: "XX has been deleted successfully",
 
 	
 

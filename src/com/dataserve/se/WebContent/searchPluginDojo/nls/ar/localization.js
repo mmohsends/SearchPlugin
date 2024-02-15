@@ -50,6 +50,7 @@ define({
 	DELETE: "حذف",
 	OBJECT_SAVED_SUCCESSFULLY: "تم انشاء XX",
 	DOC_NAME: "اسم الوثيقه",
+	DOC_NAME_AR:"اسم الوثيقه",
 	DOC_CLASS: "تصنيف الوثيقه",
 	CREATED_BY: "منشأ الوثيقه",
 	PLEASE_SELECT_ONE_DOC: "!الرجاء تحديد وثيقه واحدة عالأقل",
