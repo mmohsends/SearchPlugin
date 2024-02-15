@@ -164,7 +164,7 @@ define([ "dojo/_base/declare",
 		
 		LinkedDocument: function() {
 		    var data = {
-		        identifier: 'documentId',
+//		        identifier: 'ID',
 		        items: this.getLikedDocument()
 		    };
 	        debugger
@@ -286,7 +286,7 @@ define([ "dojo/_base/declare",
 				return "";
 			}else{
 				for (let i=0;i<gridSelect.length;i++){
-				item[i]={"faildId":gridSelect[i].faildId,"childFaildId":gridSelect[i].childFaildId}
+				item[i]={"fileId":gridSelect[i].fileId,"childFaildId":gridSelect[i].childFaildId}
 				}
 				}
 

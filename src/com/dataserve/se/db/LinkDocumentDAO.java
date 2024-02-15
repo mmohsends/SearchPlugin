@@ -21,39 +21,47 @@ public class LinkDocumentDAO extends AbstractDAO{
 	}
 	
 	public boolean addLinkDocument(LinkDocumentBean bean) throws DatabaseException {
-		try {
-			LinkDocumentBean linkDocumentBeanParent = fetchLinkByDocumentId(bean.getMainDocId());
-			System.out.println("linkDocumentBeanParent: "+linkDocumentBeanParent.getFileId());
-			for(Object obj: bean.getChilDocumentList()) {
-				String childDocId = obj.toString().replace("{", "").replace("}", "");
-				System.out.println("childDocId:"+childDocId);
-				LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(childDocId);
-				System.out.println("linkDocumentBeanParent.getFileId(): "+linkDocumentBeanParent.getFileId());
-				System.out.println("linkDocumentChild.getFileId(): "+linkDocumentChild.getFileId());
-				
-				stmt = con.prepareStatement("INSERT INTO DMS_FILES_LINKS (FILE_ID, CHILD_FILE_ID) " +
-					    "SELECT ?, ? " +
-					    "WHERE NOT EXISTS (SELECT 1 " +
-					    "                  FROM DMS_FILES_LINKS " +
-					    "                  WHERE FILE_ID = ? " +
-					    "                    AND CHILD_FILE_ID = ?)");
+	    try {
+	        LinkDocumentBean linkDocumentBeanParent = fetchLinkByDocumentId(bean.getMainDocId());
+	        System.out.println("linkDocumentBeanParent: " + linkDocumentBeanParent.getFileId());
+	        System.out.println("getChilDocumentList: " + bean.getChilDocumentList());
 
-					stmt.setInt(1, linkDocumentBeanParent.getFileId());
-					stmt.setInt(2, linkDocumentChild.getFileId());
-					stmt.setInt(3, linkDocumentBeanParent.getFileId());
-					stmt.setInt(4, linkDocumentChild.getFileId());
+	        boolean anyInserts = false; // Flag to check if any inserts were performed
 
-					return stmt.execute();
-				
-			}
-			
-            return true;
-        } catch (SQLException e) {
-            throw new DatabaseException("Error adding new record to table CLASSIFICTIONS", e);
-        } finally {
-            safeClose();
-            releaseResources();
-        }
+	        for (Object obj : bean.getChilDocumentList()) {
+	            String childDocId = obj.toString().replace("{", "").replace("}", "");
+	            System.out.println("childDocId:" + childDocId);
+
+	            LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(childDocId);
+	            System.out.println("linkDocumentBeanParent.getFileId(): " + linkDocumentBeanParent.getFileId());
+	            System.out.println("linkDocumentChild.getFileId(): " + linkDocumentChild.getFileId());
+
+	            stmt = con.prepareStatement("INSERT INTO DMS_FILES_LINKS (FILE_ID, CHILD_FILE_ID) " +
+	                    "SELECT ?, ? " +
+	                    "WHERE NOT EXISTS (SELECT 1 " +
+	                    "                  FROM DMS_FILES_LINKS " +
+	                    "                  WHERE FILE_ID = ? " +
+	                    "                    AND CHILD_FILE_ID = ?)");
+
+	            stmt.setInt(1, linkDocumentBeanParent.getFileId());
+	            stmt.setInt(2, linkDocumentChild.getFileId());
+	            stmt.setInt(3, linkDocumentBeanParent.getFileId());
+	            stmt.setInt(4, linkDocumentChild.getFileId());
+
+	            boolean inserted = stmt.executeUpdate() > 0; // Check if any row was inserted
+
+	            if (inserted) {
+	                anyInserts = true;
+	            }
+	        }
+
+	        return anyInserts; // Return true if any inserts were performed
+	    } catch (SQLException e) {
+	        throw new DatabaseException("Error adding link documents", e);
+	    } finally {
+	        safeClose();
+	        releaseResources();
+	    }
 	}
 	
 	public LinkDocumentBean fetchLinkByDocumentId(String DocId) throws DatabaseException {
@@ -83,7 +91,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 	        LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(mainDocId);
 	        System.out.println("linkDocumentChild from get: " + linkDocumentChild.getFileId());
 
-	        String sql = "SELECT CHILD_FILE_ID, DOCUMENT_CLASS, DOCUMENT_NAME, CLASS_AR_NAME " +
+	        String sql = "SELECT DMS_FILES_LINKS.FILE_ID, CHILD_FILE_ID, DOCUMENT_CLASS, DOCUMENT_NAME, CLASS_AR_NAME " +
 	                     "FROM DMS_FILES_LINKS " +
 	                     "LEFT JOIN DMS_FILES ON DMS_FILES_LINKS.CHILD_FILE_ID = DMS_FILES.FILE_ID " +
 	                     "LEFT JOIN CLASSIFICTIONS ON DMS_FILES.DOCUMENT_CLASS = CLASSIFICTIONS.SYMPOLIC_NAME " +
@@ -97,6 +105,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 
 	        while (rs.next()) {
 	            LinkDocumentBean bean = new LinkDocumentBean();
+	            bean.setFileId(rs.getInt("FILE_ID"));
 	            bean.setChildFileId(rs.getInt("CHILD_FILE_ID"));
 	            bean.setDocumentClass(rs.getString("DOCUMENT_CLASS"));
 	            bean.setDocumentName(rs.getString("DOCUMENT_NAME"));
@@ -115,6 +124,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 	}
 	
 	public int deleteLinkDocument(int faildId, int childFaildId) throws DatabaseException {
+		System.out.println("inside deleteLinkDocument: "+faildId +"::::"+childFaildId);
 	    try {
 	        stmt = con.prepareStatement(
 	                "DELETE FROM DMS_FILES_LINKS " +

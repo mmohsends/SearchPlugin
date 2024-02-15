@@ -71,7 +71,7 @@ public class LinkDocumentModel {
 				obj.put("documentName", bean.getDocumentName());
 				obj.put("documentNameAr", bean.getDocumentNameAr());
 				obj.put("mainDocId", bean.getMainDocId());
-//				obj.put("fileId", bean.getFileId());
+				obj.put("fileId", bean.getFileId());
 				obj.put("childFaildId", bean.getChildFileId());
 				obj.put("children", new JSONArray());
 				return obj;
