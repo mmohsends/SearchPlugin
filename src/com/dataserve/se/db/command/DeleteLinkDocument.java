@@ -32,8 +32,13 @@ public class DeleteLinkDocument extends CommandBase{
 			try {
 				for (Object obj : gridData) {
 					JSONObject jsonObject = (JSONObject) obj;
-		            LinkDocumentDAO dao = new LinkDocumentDAO();			
-		            dao.deleteLinkDocument(jsonObject.get("documentId").toString(), jsonObject.get("mainDocId").toString());
+		            LinkDocumentDAO dao = new LinkDocumentDAO();
+		            Object childFaildIdObj = jsonObject.get("childFaildId");
+		            int childFaildId = Integer.parseInt(childFaildIdObj.toString().replace("[", "").replace("]", ""));
+
+		            Object faildIdObj = jsonObject.get("faildId");
+		            int faildId = Integer.parseInt(faildIdObj.toString().replace("[", "").replace("]", ""));
+		            dao.deleteLinkDocument(faildId, childFaildId);
 				}
 				return delete+"";
 

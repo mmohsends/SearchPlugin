@@ -70,6 +70,8 @@ public class LinkDocumentModel {
 				obj.put("createdBy", bean.getCreatedBy());
 				obj.put("documentName", bean.getDocumentName());
 				obj.put("mainDocId", bean.getMainDocId());
+				obj.put("faildId", bean.getFileId());
+				obj.put("childFaildId", bean.getChildFileId());
 				obj.put("children", new JSONArray());
 				return obj;
 			}
@@ -115,6 +117,21 @@ public class LinkDocumentModel {
 			public void setMainDocId(String mainDocId) {
 				bean.setMainDocId(mainDocId);
 			}
+			
+			public int getFileId() {
+				return bean.getFileId();
+			}
+			public void setFileId(int fileId) {
+				bean.setFileId(fileId);
+			}
+			
+			public int getChildFileId() {
+				return bean.getChildFileId();
+			}
+			public void setChildFileId(int childFileId) {
+				bean.setChildFileId(childFileId);
+			}
+			
 			
 			public Set<LinkDocumentModel> getChildren() {
 				return children;

@@ -15,6 +15,7 @@ public class LinkDocumentBean extends AbstractBean {
 	private String MainDocId ;
 	private Set<Integer> childrenIds;
 	private Integer FileId;
+	private Integer childFileId;
 	private JSONArray ChilDocumentList;
 
 
@@ -72,6 +73,12 @@ public JSONArray getChilDocumentList() {
 }
 public void setChilDocumentList(JSONArray chilDocumentList) {
 	ChilDocumentList = chilDocumentList;
+}
+public Integer getChildFileId() {
+	return childFileId;
+}
+public void setChildFileId(int childFileId) {
+	this.childFileId = childFileId;
 }
 
 }

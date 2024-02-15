@@ -32,17 +32,19 @@ public class LinkDocumentDAO extends AbstractDAO{
 				System.out.println("linkDocumentChild.getFileId(): "+linkDocumentChild.getFileId());
 				
 				stmt = con.prepareStatement("INSERT INTO DMS_FILES_LINKS (FILE_ID, CHILD_FILE_ID) " +
-	                    "SELECT ?, ?" +
-	                    "WHERE NOT EXISTS (SELECT 1 " +
-	                    "                  FROM DMS_FILES_LINKS " +
-	                    "                  WHERE FILE_ID = ? " +
-	                    "                    AND CHILD_FILE_ID = ?)");
+					    "SELECT ?, ? " +
+					    "WHERE NOT EXISTS (SELECT 1 " +
+					    "                  FROM DMS_FILES_LINKS " +
+					    "                  WHERE FILE_ID = ? " +
+					    "                    AND CHILD_FILE_ID = ?)");
 
-				stmt.setInt(1, linkDocumentBeanParent.getFileId());
-				stmt.setInt(2, linkDocumentChild.getFileId());
-				stmt.setInt(3, linkDocumentBeanParent.getFileId());
-				stmt.setInt(4, linkDocumentChild.getFileId());
-	            return stmt.execute();
+					stmt.setInt(1, linkDocumentBeanParent.getFileId());
+					stmt.setInt(2, linkDocumentChild.getFileId());
+					stmt.setInt(3, linkDocumentBeanParent.getFileId());
+					stmt.setInt(4, linkDocumentChild.getFileId());
+
+					return stmt.execute();
+				
 			}
 			
             return true;
@@ -71,52 +73,53 @@ public class LinkDocumentDAO extends AbstractDAO{
 		} catch (SQLException e) {
 			throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
 		} finally {
-			safeClose();
-			releaseResources();
+//			safeClose();
+//			releaseResources();
 		}
 	}
 	
 	public Set<LinkDocumentBean> fetchLinkDocument(String mainDocId) throws DatabaseException {
-		try {
-			stmt = con.prepareStatement("SELECT DOCUMENT_ID, DOCUMENT_CLASS, CREATED_BY, DOCUMENT_NAME, MAIN_DOC_ID " +
-                    "FROM DMS_FILES_LINK WHERE MAIN_DOC_ID = ?");
-			stmt.setString(1, mainDocId);	
-			rs = stmt.executeQuery();
-			Set<LinkDocumentBean> beans = new LinkedHashSet<LinkDocumentBean>();			
-			while (rs.next()) {
-				LinkDocumentBean bean = new LinkDocumentBean();
-				bean.setDocumentId(rs.getString("DOCUMENT_ID"));
-				bean.setDocumentClass(rs.getString("DOCUMENT_CLASS"));
-				bean.setCreatedBy(rs.getString("CREATED_BY"));
-				bean.setDocumentName(rs.getString("DOCUMENT_NAME"));
-				bean.setMainDocId(rs.getString("MAIN_DOC_ID"));
-				beans.add(bean);
-			}
-			return beans;
-		} catch (SQLException e) {
-			throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
-		} finally {
-			safeClose();
-			releaseResources();
-		}
+	    try {
+	        LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(mainDocId);
+
+	        stmt = con.prepareStatement("SELECT FILE_ID, CHILD_FILE_ID " +
+	                "FROM DMS_FILES_LINKS WHERE FILE_ID = ?");
+	        stmt.setInt(1, linkDocumentChild.getFileId());    
+	        rs = stmt.executeQuery();
+	        Set<LinkDocumentBean> beans = new LinkedHashSet<LinkDocumentBean>();            
+	        while (rs.next()) {
+	            LinkDocumentBean bean = new LinkDocumentBean();
+	            bean.setFileId(rs.getInt("FILE_ID"));
+	            bean.setChildFileId(rs.getInt("CHILD_FILE_ID"));
+
+	            beans.add(bean);
+	        }
+	        System.out.println("bean " + beans);
+	        return beans;
+	    } catch (SQLException e) {
+	        throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
+	    } finally {
+	        safeClose();
+	        releaseResources();
+	    }
 	}
 	
-	public int deleteLinkDocument(String documentId, String mainDocId) throws DatabaseException {
-		try {
-			stmt = con.prepareStatement(
-				    "DELETE FROM DMS_FILES_LINK " +
-				    "WHERE DOCUMENT_ID = ? " +
-				    "  AND MAIN_DOC_ID = ?");
-				stmt.setString(1, documentId);
-				stmt.setString(2, mainDocId);
-				int rowsAffected = stmt.executeUpdate();
-				return rowsAffected;
-		} catch (SQLException e) {
-			throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
-		} finally {
-			safeClose();
-			releaseResources();
-		}
+	public int deleteLinkDocument(int faildId, int childFaildId) throws DatabaseException {
+	    try {
+	        stmt = con.prepareStatement(
+	                "DELETE FROM DMS_FILES_LINKS " +
+	                "WHERE FILE_ID = ? " +
+	                "AND CHILD_FILE_ID = ?");
+	        stmt.setInt(1, faildId);
+	        stmt.setInt(2, childFaildId);
+	        int rowsAffected = stmt.executeUpdate();
+	        return rowsAffected;
+	    } catch (SQLException e) {
+	        throw new DatabaseException("Error deleting record from table DMS_FILES_LINK", e);
+	    } finally {
+	        safeClose();
+	        releaseResources();
+	    }
 	}
 	
 	

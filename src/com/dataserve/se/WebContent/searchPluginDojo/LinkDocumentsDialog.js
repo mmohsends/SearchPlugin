@@ -167,12 +167,12 @@ define([ "dojo/_base/declare",
 		        identifier: 'documentId',
 		        items: this.getLikedDocument()
 		    };
-
+	        debugger
 		    var store = new dojo.data.ItemFileWriteStore({ data: data });
 
 		    var layout = [
-		        { name: this._lcl.DOC_NAME, field: 'documentName', width: '33.3%' },
-		        { name: this._lcl.DOC_CLASS, field: 'documentClass', width: '33.3%' },
+		        { name: this._lcl.DOC_NAME, field: 'faildId', width: '33.3%' },
+		        { name: this._lcl.DOC_CLASS, field: 'childFaildId', width: '33.3%' },
 		        { name: this._lcl.CREATED_BY, field: 'createdBy', width: '33.3%' },
 		    ];
 
@@ -286,7 +286,7 @@ define([ "dojo/_base/declare",
 				return "";
 			}else{
 				for (let i=0;i<gridSelect.length;i++){
-				item[i]={"mainDocId":gridSelect[i].mainDocId.toString(),"documentId":gridSelect[i].documentId.toString()}
+				item[i]={"faildId":gridSelect[i].faildId,"childFaildId":gridSelect[i].childFaildId}
 				}
 				}
 
