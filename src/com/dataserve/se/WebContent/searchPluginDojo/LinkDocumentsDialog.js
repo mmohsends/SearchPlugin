@@ -171,9 +171,9 @@ define([ "dojo/_base/declare",
 		    var store = new dojo.data.ItemFileWriteStore({ data: data });
 
 		    var layout = [
-		        { name: this._lcl.DOC_CLASS, field: 'documentClass', width: '33.3%' },
 		        { name: this._lcl.DOC_NAME, field: 'documentName', width: '33.3%' },
-		        { name: this._lcl.DOC_NAME_AR, field: 'documentNameAr', width: '33.3%' },
+		        { name: this._lcl.CLASS_NAME_EN, field: 'documentClass', width: '33.3%' },
+		        { name: this._lcl.CLASS_NAME_AR, field: 'documentNameAr', width: '33.3%' },
 		    ];
 
 		    this.grid = new dojox.grid.EnhancedGrid({

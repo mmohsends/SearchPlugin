@@ -16,7 +16,6 @@ import com.dataserve.se.db.LinkDocumentDAO;
 import com.dataserve.se.db.command.CommandBase;
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
 public class DeleteLinkDocument extends CommandBase{
