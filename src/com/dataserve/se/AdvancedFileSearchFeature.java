@@ -63,7 +63,7 @@ public class AdvancedFileSearchFeature extends PluginFeature {
 	 */
 	public String getIconUrl() {
 //		return "AdvancedFileSearchFeature";
-		return "SearchFeatureIcon";
+		return "ecmSimpleSearchLaunchIcon";
 	}
 
 	/**

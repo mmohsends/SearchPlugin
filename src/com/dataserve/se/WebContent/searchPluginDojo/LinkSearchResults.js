@@ -70,10 +70,8 @@ function(declare,
 		},
 
 		postCreate: function() {
-			debugger
 			this.logEntry("postCreate");
 			this.inherited(arguments);
-			console.log("args",this.args)
 			
 			domAttr.set(this.searchResults.domNode, "role", "region");
 			domAttr.set(this.searchResults.domNode, "aria-label", this.messages.browse_content_list_label);

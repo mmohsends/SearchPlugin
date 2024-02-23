@@ -40,6 +40,9 @@ public class SearchService  extends PluginService {
 	public static final String REPOSITORY_TYPE = "repositoryType";
 	public static final String QUERY = "query";
 	public static final String CLASS_SYMBOLIC_NAME= "classSymbolicName";
+	public static final String SEARCH_PROPERTIES= "searchProperties"; 
+	public static final String OPERATON= "operation";
+	public static final String SEARCH_WORD= "searchWord"; 
 	/**
 	 * Returns the unique identifier for this service.
 	 * <p>
@@ -87,18 +90,27 @@ public class SearchService  extends PluginService {
 	 */
 	public void execute(PluginServiceCallbacks callbacks,
 			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {		String methodName = "execute";
+			throws Exception {		
+			String methodName = "execute";
 			callbacks.getLogger().logEntry(this, methodName, request);
 
 			String repositoryId = request.getParameter(REPOSITORY_ID);
 			String repositoryType = request.getParameter(REPOSITORY_TYPE);
-			String query = request.getParameter(QUERY);
-			String classSymbolicName = request.getParameter(CLASS_SYMBOLIC_NAME);
-			JSONObject jsonObj = JSONObject.parse(request.getParameter("searchProperties"));
+			//String query = request.getParameter(QUERY);
+			
+			String operation = request.getParameter(OPERATON);
+			String newQuery = "";
 			ObjectStore os = callbacks.getP8ObjectStore(repositoryId);
+			if(operation.equals("advancedSearch")) {
+				String classSymbolicName = request.getParameter(CLASS_SYMBOLIC_NAME);
+				JSONObject searchProperties = JSONObject.parse(request.getParameter(SEARCH_PROPERTIES));				
 
+				newQuery = buildAdvancedSearchQuery(os,classSymbolicName, searchProperties);
+			}if (operation.equals("generalSearch")){
+				String searchWord = request.getParameter(SEARCH_WORD);
+				newQuery = buildGeneralSearchQuery(os,searchWord);
+			}
 
-			String newQuery = getClassContentWithFilter(os,classSymbolicName, jsonObj);
 			
 			JSONResultSetResponse jsonResults = new JSONResultSetResponse();
 			jsonResults.setPageSize(50);
@@ -113,12 +125,12 @@ public class SearchService  extends PluginService {
 				if (synchObject != null) {
 					synchronized (synchObject) {
 						 if (repositoryType.equals("p8")) {
-							SamplePluginSearchServiceP8.executeP8Search(request, repositoryId, newQuery, callbacks, jsonResults, request.getLocale());
+							SearchServiceP8.executeP8Search(request, repositoryId, newQuery, callbacks, jsonResults, request.getLocale());
 						}
 					}
 				} else {
 					 if (repositoryType.equals("p8")) {
-						SamplePluginSearchServiceP8.executeP8Search(request, repositoryId, newQuery, callbacks, jsonResults, request.getLocale());
+						SearchServiceP8.executeP8Search(request, repositoryId, newQuery, callbacks, jsonResults, request.getLocale());
 					}
 				}
 
@@ -140,6 +152,8 @@ public class SearchService  extends PluginService {
 				callbacks.getLogger().logExit(this, methodName, request);
 			}
 		}
+
+		
 
 		private void writeResponse(HttpServletRequest request, HttpServletResponse response, JSONResultSetResponse json) throws Exception {
 			Writer writer = null;
@@ -177,12 +191,12 @@ public class SearchService  extends PluginService {
 					writer.close();
 			}
 		}
-		public static String getClassContentWithFilter(ObjectStore os, String classSymbolic, JSONObject jsonObj) {
+		public static String buildAdvancedSearchQuery(ObjectStore os, String classSymbolic, JSONObject searchProperties) {
 		    String sqlQuery = "SELECT * FROM "+ classSymbolic + " Where ";
 		    
-		    for (Object currentKey : jsonObj.keySet()) {
+		    for (Object currentKey : searchProperties.keySet()) {
 		        String strKey = (String) currentKey;
-		        List<?> value = (List<?>)jsonObj.get(currentKey);
+		        List<?> value = (List<?>)searchProperties.get(currentKey);
 			    if(value.get(1).toString().equalsIgnoreCase("String") ) {
 		    		sqlQuery += "DocumentTitle LIKE '%" + value.get(0).toString() +"%' OR ";
 		   		 }
@@ -199,5 +213,20 @@ public class SearchService  extends PluginService {
 
 		    return finalQuery;
 		}
+		
+		private String buildGeneralSearchQuery(ObjectStore os, String searchWord) {
+			StringBuilder stringBuilder = new StringBuilder();
+	       
+	        stringBuilder.append("[");
+	        stringBuilder.append("DocumentTitle");
+	        stringBuilder.append("]");
+	        stringBuilder.append(" like ");
+	        stringBuilder.append("'%");
+	        stringBuilder.append(searchWord);
+	        stringBuilder.append("%'");
+	          
+	        return "SELECT * FROM Document T LEFT JOIN ContentSearch cs ON T.This = cs.QueriedObject " + "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" + " OR " + stringBuilder;
+		    		
+	}
 		
 	}

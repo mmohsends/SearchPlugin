@@ -21,16 +21,14 @@ define({
 	
 	PHYSICAL_ARCHIVE: "الأرشفة الورقية",
 	
-	SCAN_DOC: "مسح ضوئي",
-	UPLOAD_DOC: "رفع من الجهاز",
-	SEARCH_DOC: "بحث متقدم  فى  الملف",
-	SEARCH_FILE: "بحث  فى  الملف",
+	ADVANCED_SEARCH_FILE: "بحث متقدم فى  الملف",
 	DOC_TITLE: ":عنوان الوثيقة",
-	SEARCH_HOLDER: "Search........",
-	SEARCH: "Search",
-	
+	SEARCH_HOLDER: "بحث........",
+	SEARCH: "بحث",
+	SEARCH_CONTENT: "بحث فى المحتوى",
 	Select_CLASSS: "اختار التصنيف ",
-	DOC_SUB_CLASSS: "المستند (يشمل الفئات الفرعية)",
+	SEARCH_WORD_IS_REQUIRED : "كلمات البحث مطلوبة",
+
 	
 	E_ACCESS_DENIED : "المستخدم لايمتلك الصلاحيات على المحتوي الألكتروني",
 	E_OBJECT_NOT_FOUND : "العنصر غير موجود في المحتوى الألكتروني",
@@ -43,9 +41,8 @@ define({
 	ADD_AND_GENERATE_BARCODE: "حفظ و طباعة باركود",
 	DOCUMENT_FILE_ID_NOT_FOUND: "لا يوجد رقم ملف لهذه الوثيقة",
 	FAILED_TO_GET_DOCUMENT_ID: "فشل احضار رقم الملف",
-	Most_Using: "الأكثر استخدام",
+	Most_Using: "أكثر الكلمات بحثاْ ",
 	Link_Documents: "ربط وثائق",
-	SEARCH: "بحث",
 	LINK: "ربط",
 	DELETE: "حذف",
 	OBJECT_SAVED_SUCCESSFULLY: "تم انشاء XX",

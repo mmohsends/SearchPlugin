@@ -98,7 +98,7 @@ define([
             var gridStore = new dojo.data.ItemFileWriteStore({data: storeData});
 
             var layout = [
-                {'name': 'ID', 'field': 'id'},
+                {'name': 'ID', 'field': 'id', 'hidden' : true},
                 {name: this._lcl.Most_Using, field: 'propertyValue', 'width': '100%'}
             ];
 
@@ -125,7 +125,6 @@ define([
                     var advancedFileSearchFeature = new AdvancedFileSearchFeature({
                         propertyValue: propertyValue
                     });
-                    console.log(propertyValue);
                     this.hide();
                 }.bind(this)); // Ensure 'this' context is correct
             }.bind(this)); // Bind 'this' to ensure it refers to the correct context for 'require'
@@ -145,7 +144,6 @@ define([
         	var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",
 					params);	
         	var resultSet = new ResultSet(response);
-        	debugger;
        
 			var results = [];
 			if(!resultSet.result.startsWith("ERROR")){

@@ -11,7 +11,8 @@ define([
 	"searchPluginDojo/LinkFileResultsManager",
 	
     "searchPluginDojo/AdvancedFileSearchResults",
-
+    
+    "searchPluginDojo/Toaster",
 	"dojo/i18n!./nls/localization",
 	"dojo/text!./templates/AdvancedFileSearchFeature.html"
 ],
@@ -24,6 +25,7 @@ function(declare,
 		MostUsingDialog,
 		LinkFileResultsManager,
 		AdvancedFileSearchResults,
+		Toaster,
 		lcl,
 		template) {
 	/**
@@ -37,6 +39,7 @@ function(declare,
 		/** @lends eDSAdminPluginDojo.EDSHomeFeature.prototype */
 		_lcl: lcl,
 		templateString: template,
+		toaster: new Toaster(),
 		
 		// Set to true if widget template contains DOJO widgets.
 		widgetsInTemplate: false,
@@ -131,27 +134,23 @@ function(declare,
 			this.viewContainer.addChild(advancedFileSearchManager);
 			this.viewContainer.resize();
 		},
-		
-		openLinkFileResultsManager :function(){
-//			this.clearView();
-//			var params = {};
-//			_this=this;
-//			params.parent=_this;
-//			var linkFileResultsManager = new LinkFileResultsManager(params);
-//			this.viewContainer.addChild(linkFileResultsManager);
-//			this.viewContainer.resize();
-		},
-		
+			
 		
 		generalSearch :function(){
-			
+			var searchValue = this.searchInput.value;
+            if (typeof searchValue === 'string' && searchValue.trim().length === 0) {
+            	this.toaster.redToaster(lcl.SEARCH_WORD_IS_REQUIRED);
+        		return;
+    		} 
+            
 			this.clearView();
 			var params = {};
 			_this=this;
-			params.classSymbolicName='workwork';
-			params.searchProperties={};
+			params.operation = 'generalSearch';
+			//params.classSymbolicName='workwork';
+			//params.searchProperties={};
 
-			params.searchKeyWord = this.searchInput.value;
+			params.searchWord = this.searchInput.value;
 			params.parent=_this;
 			var advancedFileSearchResults = new AdvancedFileSearchResults(params);
 			this.viewContainer.addChild(advancedFileSearchResults);

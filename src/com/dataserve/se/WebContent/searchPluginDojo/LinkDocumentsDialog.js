@@ -167,7 +167,6 @@ define([ "dojo/_base/declare",
 //		        identifier: 'ID',
 		        items: this.getLikedDocument()
 		    };
-	        debugger
 		    var store = new dojo.data.ItemFileWriteStore({ data: data });
 
 		    var layout = [
@@ -219,8 +218,6 @@ define([ "dojo/_base/declare",
 			  	return item.attributeDisplayValues.ID;
 		  });
 		  }
-		  console.log("docInfo: ",docInfo)
-		  console.log("docInfo: ",JSON.stringify(docInfo))
       	params = {
 				method: "AddLinkDocument",
           		"docInfo": JSON.stringify(docInfo),

@@ -3,15 +3,12 @@ package com.dataserve.se.db.command;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.dataserve.se.business.classification.ClassificationException;
 import com.dataserve.se.business.classification.PropertyTemplateModel;
-import com.dataserve.se.db.command.CommandBase;
-import com.ibm.ecm.extension.PluginServiceCallbacks;
-import com.ibm.json.java.JSONArray;
 import com.dataserve.se.permissions.ActionType;
 import com.dataserve.se.permissions.Module;
+import com.ibm.json.java.JSONArray;
 
 public class GetClassProperty extends CommandBase {
 	private static final String REPOSITORY_ID = "repositoryId";

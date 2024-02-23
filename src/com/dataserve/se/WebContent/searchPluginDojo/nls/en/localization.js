@@ -21,15 +21,15 @@ define({
 	
 	PHYSICAL_ARCHIVE: "Physical Archiving",
 	
-	SCAN_DOC: "Scan Document",
-	UPLOAD_DOC: "Upload Document",
-	SEARCH_DOC: "Advanced File Search",
-	SEARCH_FILE: "File Search",
+	
+	ADVANCED_SEARCH_FILE: "Advanced File Search",
 	SEARCH_HOLDER: "Search........",
 	SEARCH: "Search",
+	SEARCH_CONTENT: "Content Search",
 	DOC_TITLE: "Document Title:",
 	Select_CLASSS: "Select Class",
-	DOC_SUB_CLASSS: "Document (including subclasses)",
+	SEARCH_WORD_IS_REQUIRED : "Search Words Required",
+
 	
 	E_ACCESS_DENIED : "The user have no permission to FN",
 	E_OBJECT_NOT_FOUND : "The requested item was not found in FN",
@@ -41,9 +41,8 @@ define({
 	ADD_AND_GENERATE_BARCODE: "Add and Generate Barcode",
 	DOCUMENT_FILE_ID_NOT_FOUND: "File ID not found",
 	FAILED_TO_GET_DOCUMENT_ID: "Failed to get File ID",
-	Most_Using: "Most Using",
+	Most_Using: "Most Search KeyWords",
 	Link_Documents: "Link Documents",
-	SEARCH: "Search",
 	LINK: "Link",
 	DELETE: "Delete",
 	OBJECT_SAVED_SUCCESSFULLY: "XX has been created successfully",

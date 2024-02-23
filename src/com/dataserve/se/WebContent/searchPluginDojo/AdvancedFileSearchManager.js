@@ -163,7 +163,7 @@ define([
 
             // Create a scrollable container for the tree
             var treeScrollContainer = new ContentPane({
-                style: "max-height: 450px; overflow: auto;",
+                style: "max-height: 500px; overflow: auto;max-width: fit-content",
                 content: this.tree
             });
 
@@ -178,14 +178,14 @@ define([
 
 
             this.dropDownButton = new DropDownButton({
-                label: this._lcl.DOC_SUB_CLASSS,
+                label: this._lcl.Select_CLASSS,
                 dropDown: this.tooltipDialog
             });
             
             this.dropDownButton.startup();
             var buttonLabel = that.dropDownButton.domNode.querySelector('.dijitButtonNode');
             if (buttonLabel) {
-                buttonLabel.textContent = this._lcl.DOC_SUB_CLASSS; // Update the text content of the label
+                buttonLabel.textContent = this._lcl.Select_CLASSS; // Update the text content of the label
             }
             var classSelectorDiv = this.ClassSelectorDiv;
             if (classSelectorDiv) {
@@ -220,7 +220,7 @@ define([
             }
 
             // Add a root item if your data does not have one
-            formattedData.push({ id: 'root', name: this._lcl.DOC_SUB_CLASSS, parent: null });
+            formattedData.push({ id: 'root', name: this._lcl.Select_CLASSS, parent: null });
 
             originalData.forEach(function (item) {
                 processItem(item, 'root');
@@ -311,7 +311,8 @@ define([
 		        inputContainer.style.marginBottom = '10px';
 		        
 		        var label = document.createElement('label');
-		        label.textContent = symbolicName + ' (' + dataType + '): ';
+		       // label.textContent = symbolicName + ' (' + dataType + '): ';
+		        label.textContent = symbolicName;
 		        label.style.marginRight = '5px';
 		        inputContainer.appendChild(label);
 
@@ -346,7 +347,7 @@ define([
 		    });
 
 		    var submitButton = document.createElement('button');
-		    submitButton.textContent = this._lcl.SEARCH_FILE;
+		    submitButton.textContent = this._lcl.SEARCH;
 		    submitButton.id = 'submitButton';
 		    submitButton.style.cssText = 'margin-top: 20px; background-color: #20365b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold;';
 		    container.appendChild(submitButton);
@@ -397,7 +398,6 @@ define([
 		var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",
 				params);	
 		var resultSet = new ResultSet(response);
-		debugger;
 	
 		var results = [];
 		if(!resultSet.result.startsWith("ERROR")){
@@ -564,6 +564,7 @@ define([
 		generalSearch :function(classSymbolicName,searchProperties){
 			this.clearViewSearch();
 			var params = {};
+			params.operation = 'advancedSearch';
 			params.classSymbolicName=classSymbolicName;
 			params.searchProperties=searchProperties;
 			_this=this;

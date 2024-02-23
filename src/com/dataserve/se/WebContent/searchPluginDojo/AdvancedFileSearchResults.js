@@ -176,14 +176,11 @@ function(declare,
 			var requestParams = {};
 			requestParams.repositoryId = this.repository.id;
 			requestParams.repositoryType = this.repository.type;
-//			requestParams.query = this.queryString.get("value");
-			requestParams.query = "SELECT * FROM Document";
+			requestParams.operation = this.operation;
+			//requestParams.query = "SELECT * FROM Document";
 			requestParams.classSymbolicName = this.classSymbolicName;
 			requestParams.searchProperties = JSON.stringify(this.searchProperties);
-//			requestParams.searchProperties = this.searchProperties;
-			console.log("this is requestParams", requestParams);
-			console.log("this is this.searchProperties", this.searchProperties);
-			debugger;
+			requestParams.searchWord = this.searchWord;
 			Request.invokePluginService("SearchPlugin", "SearchService",
 				{
 					requestParams: requestParams,

@@ -116,7 +116,6 @@ define(
                  
      			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",params);
      			var resultSet = new ResultSet(response);
-     			debugger;
 	 			message = new ecm.widget.dialog.MessageDialog();
     			var results = [];
     			if(!resultSet.result.startsWith("ERROR")){

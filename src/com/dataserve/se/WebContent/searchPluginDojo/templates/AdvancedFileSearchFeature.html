@@ -3,16 +3,17 @@
 		<div data-dojo-type="dijit/layout/ContentPane"  data-dojo-props="region:'top'" >
 		    <div style="margin-bottom: 10px; margin-top: 40px;" >
 		        <input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-attach-point="searchInput"  placeholder=${_lcl.SEARCH_HOLDER} style="width: 60%;">
-		          <!-- Button for Search -->
-			      <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:openMostUsingDialog">
-			        ${_lcl.Most_Using}
-			    </button>
-			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:openLinkFileResultsManager" style="margin-left: 10px;">
-			        ${_lcl.SEARCH}
+		          <!-- Button for Search --> 
+			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:generalSearch" style="margin-left: 10px;">
+			        ${_lcl.SEARCH_CONTENT}
 			    </button>
 			    <!--  Advanced Button for Search -->
 			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:openAdvancedFileSearchManager">
-			        ${_lcl.SEARCH_DOC}
+			        ${_lcl.ADVANCED_SEARCH_FILE}
+			    </button>
+			     <!-- most using button --> 
+			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:openMostUsingDialog">
+			        ${_lcl.Most_Using}
 			    </button>
 		    </div>
 		   
