@@ -2,29 +2,22 @@ package com.dataserve.se.db.command;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ibm.ecm.extension.PluginServiceCallbacks;
-import com.ibm.json.java.JSONArray;
-import com.ibm.json.java.JSONObject;
-
+import com.dataserve.se.bean.DMSAuditBean;
 import com.dataserve.se.db.AuditDao ;
 import com.dataserve.se.db.DatabaseException;
 import com.dataserve.se.permissions.ActionType;
 import com.dataserve.se.permissions.Module;
-import com.filenet.api.core.ObjectStore;
-import com.dataserve.se.bean.DMSAuditBean;
-import com.dataserve.se.business.classification.ClassificationException;
-import com.dataserve.se.business.classification.ClassificationModel;
+import com.ibm.ecm.extension.PluginServiceCallbacks;
+import com.ibm.json.java.JSONObject;
 
 public class AuditGenerator extends CommandBase  {
 
-	private static final String REPOSITORY_ID = "repositoryId";
 	
 	public AuditGenerator(HttpServletRequest request) {
 		super(request);
@@ -100,11 +93,11 @@ public class AuditGenerator extends CommandBase  {
 
 	@Override
 	protected Module getModule() {
-		return Module.CLASSMANAGERFILENET;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.ALL_ACTIONS;
+		return null;
 	}
 }

@@ -49,12 +49,12 @@ public class GetClassificationsByUser extends CommandBase {
 
 	@Override
 	protected Module getModule() {
-		return Module.CLASSIFICATION;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.VIEW;
+		return null;
 	}
 
 }

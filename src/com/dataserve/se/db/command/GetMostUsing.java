@@ -32,12 +32,12 @@ public class GetMostUsing extends CommandBase {
 
 	@Override
 	protected Module getModule() {
-		return Module.GROUP;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.VIEW;
+		return null;
 	}
 
 }

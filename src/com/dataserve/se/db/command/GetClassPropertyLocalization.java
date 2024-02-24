@@ -63,11 +63,11 @@ public class GetClassPropertyLocalization extends CommandBase {
 	}
 	@Override
 	protected Module getModule() {
-		return Module.CLASSMANAGERFILENET;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.ALL_ACTIONS;
+		return null;
 	}
 }

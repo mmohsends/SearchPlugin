@@ -34,11 +34,11 @@ public class AdvancedFileSearch extends CommandBase{
 	
 	@Override
 	protected Module getModule() {
-		return Module.ELECTRONIC_ARCHIVE;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.SEARCH;
+		return null;
 	}
 }

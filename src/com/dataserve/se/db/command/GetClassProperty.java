@@ -52,11 +52,11 @@ public class GetClassProperty extends CommandBase {
 	
 	@Override
 	protected Module getModule() {
-		return Module.CLASSMANAGERFILENET;
+		return null;
 	}
 
 	@Override
 	protected com.dataserve.se.permissions.ActionType getActionType() {
-		return ActionType.ALL_ACTIONS;
+		return null;
 	}
 }

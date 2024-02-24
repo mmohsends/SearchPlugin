@@ -43,12 +43,12 @@ public class AddLinkDocument extends CommandBase {
 
 	@Override
 	protected Module getModule() {
-		return Module.CLASSIFICATION;
+		return null;
 	}
 
 	@Override
 	protected ActionType getActionType() {
-		return ActionType.CREATE;
+		return null;
 	}
 
 }
