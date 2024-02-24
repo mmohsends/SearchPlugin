@@ -118,7 +118,6 @@ public class SearchServiceP8 {
 			row.addAttribute("ID", doc.get_Id().toString(), JSONResultSetRow.TYPE_STRING, null, doc.get_Id().toString());
 			row.addAttribute("className", doc.getClassName(), JSONResultSetRow.TYPE_STRING, null, doc.getClassName());
 			row.addAttribute("Creator", doc.get_Creator(), JSONResultSetRow.TYPE_STRING, null, doc.get_Creator());
-			row.addAttribute("testchoice1", doc.getProperties().getStringValue("testchoice1"), JSONResultSetRow.TYPE_STRING, null, doc.getProperties().getStringValue("testchoice1"));
 			row.addAttribute("ClassDescription", doc.get_ClassDescription().toString(), JSONResultSetRow.TYPE_STRING, null, doc.get_ClassDescription().toString());
 			row.addAttribute("ModifiedBy", doc.get_LastModifier(), JSONResultSetRow.TYPE_STRING, null, doc.get_LastModifier());
 			row.addAttribute("LastModified", doc.get_DateLastModified().toString(), JSONResultSetRow.TYPE_TIMESTAMP, null, doc.get_DateLastModified().toString());

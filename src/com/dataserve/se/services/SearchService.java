@@ -225,7 +225,18 @@ public class SearchService  extends PluginService {
 	        stringBuilder.append(searchWord);
 	        stringBuilder.append("%'");
 	          
-	        return "SELECT * FROM Document T LEFT JOIN ContentSearch cs ON T.This = cs.QueriedObject " + "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" + " OR " + stringBuilder;
+	        return "SELECT    "
+	        		+ " [ClassDescription], [ClassificationStatus], [CmFederatedLockStatus], [CmIndexingFailureCode], [CmIsMarkedForDeletion], "
+	        		+ "[CmRetentionDate], [ComponentBindingLabel], [CompoundDocumentState], [ContentRetentionDate], [ContentSize], [Creator], "
+	        		+ "[CurrentState], [DateCheckedIn], [DateContentLastAccessed], [DateCreated], [DateLastModified], [DocumentTitle], [EntryTemplateId], "
+	        		+ "[EntryTemplateLaunchedWorkflowNumber], [EntryTemplateObjectStoreName], [Id], [IgnoreRedirect], [IndexationId], [IsCurrentVersion],"
+	        		+ " [IsFrozenVersion], [IsInExceptionState], [IsReserved], [IsVersioningEnabled], [LastModifier], [LockOwner], [LockTimeout], [LockToken],"
+	        		+ " [MajorVersionNumber], [MimeType], [MinorVersionNumber], [Name], [Owner], [PublicationInfo], [ReservationType], [StorageLocation], [VersionStatus] "
+	        		+ ""
+	        		+ "FROM Document T "
+	        		+ "INNER JOIN ContentSearch cs ON T.This = cs.QueriedObject " 
+	        		+ "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" ;
+	       // + " OR " + stringBuilder;
 		    		
 	}
 		
