@@ -74,21 +74,7 @@ private Set<ClassificationModel> children = new LinkedHashSet<ClassificationMode
 		}
 		
 		
-		public static Map<String, String> fetchCustomClassPropertyDefinitionLocalization(
-				String repositoryId, String classSymbolicName,
-				String selectedLocale, PluginServiceCallbacks callBacks)
-				throws ClassificationException {
-			try {
-				CEDAO cedao = new CEDAO(repositoryId, callBacks);
-				return cedao.fetchCustomClassPropertyDefinitionLocalization(
-						classSymbolicName, selectedLocale);
-
-			} catch (FileNetException e) {
-				throw new ClassificationException(
-						"Error Getting Classificafion Properties for class with symbolicName '"
-								+ classSymbolicName + "'", e);
-			}
-		}
+		
 		public static Set<ClassificationModel> getFNAddedClassifications() throws ClassificationException {
 			try {
 				ClassificationDAO dao = new ClassificationDAO();

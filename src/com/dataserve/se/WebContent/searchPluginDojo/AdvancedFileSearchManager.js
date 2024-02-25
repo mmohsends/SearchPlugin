@@ -312,7 +312,7 @@ define([
 		        
 		        var label = document.createElement('label');
 		       // label.textContent = symbolicName + ' (' + dataType + '): ';
-		        label.textContent = symbolicName;
+		        label.textContent = item.displayName;
 		        label.style.marginRight = '5px';
 		        inputContainer.appendChild(label);
 
@@ -376,8 +376,6 @@ define([
 		            inputData.searchProperties['DocumentTitle'] = [titleInput.value,docTitlekeyType];
 		        }
 
-		        console.log(inputData); // Output inputData to the console for
-//		        this.getFilesDataBySearchPropertiesData(inputData.classSymbolicName,inputData.searchProperties);
 		        that.saveSearchProperties(inputData.classSymbolicName,inputData.searchProperties)
 		        that.generalSearch(inputData.classSymbolicName,inputData.searchProperties);
 		        
@@ -413,49 +411,6 @@ define([
 	},
                            
 
-		/**
-		 * getFilesData BySearchPropertiesData
-		 */
-        getFilesDataBySearchPropertiesData : function(classSymbolicName,searchProperties) {
-			params = {
-				method : "AdvancedFileSearchProperties",
-				repositoryId : ecm.model.desktop.getDefaultRepository().id,
-				classSymbolicName : symblolicName,
-				searchProperties : searchProperties
-			};
-
-			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",
-					params);
-			var resultSet = new ResultSet(response);
-
-			var results = [];
-			if (!resultSet.result.startsWith("ERROR")) {
-				results = json.parse(resultSet.result, true);
-			} else {
-				
-				if (resultSet.result.includes("(ACCESS DENIED)")) {
-					this.toaster.redToaster(lcl.ACCESS_DENIED);						
-				}else  if(resultSet.result.includes("(FileNetException)")){
-					if(resultSet.result.includes("E_ACCESS_DENIED")){
-						this.toaster.redToaster(lcl.E_ACCESS_DENIED);
-					}else if(resultSet.result.includes("E_OBJECT_NOT_FOUND")){
-						this.toaster.redToaster(lcl.E_OBJECT_NOT_FOUND);
-					}
-					else if(resultSet.result.includes("E_BAD_CLASSID")){
-						this.toaster.redToaster(lcl.E_BAD_CLASSID);
-					}
-					else{
-						this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-					}
-				}
-				else {
-					this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-				}
-				console.log("Failed to load data!");
-				console.log(resultSet);
-			}
-			return results;
-		},
 		
 		/**
 		 * get class custom property
@@ -499,66 +454,6 @@ define([
 			}
 			return results;
 		},
-		
-		
-		
-		
-		GetPropertiesLocalizationBySymbolicName : function(symblolicName) {
-			
-			if (symblolicName) {
-				var resultSet = this.getPropertiesLocalization(symblolicName);
-				var data_list = [];
-				if (!resultSet.result.startsWith("ERROR")) {
-					data_list = JSON.parse(resultSet.result);
-				}  else {
-					
-					if (resultSet.result.includes("(ACCESS DENIED)")) {
-						this.toaster.redToaster(lcl.ACCESS_DENIED);						
-					}else  if(resultSet.result.includes("(FileNetException)")){
-						if(resultSet.result.includes("E_ACCESS_DENIED")){
-							this.toaster.redToaster(lcl.E_ACCESS_DENIED);
-						}else if(resultSet.result.includes("E_OBJECT_NOT_FOUND")){
-							this.toaster.redToaster(lcl.E_OBJECT_NOT_FOUND);
-						}
-						else if(resultSet.result.includes("E_BAD_CLASSID")){
-							this.toaster.redToaster(lcl.E_BAD_CLASSID);
-						}
-						else{
-							this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-						}
-					}
-					else {
-						this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-					}
-					console.log("Failed to load data!");
-					console.log(resultSet);
-				}
-				
-				return data_list;
-			}
-
-		},
-		getPropertiesLocalization : function(symblolicName){
-			this.symbolicName = symblolicName;
-    
-        	params = {
-        			method: "GetClassPropertyLocalization",
-        			repositoryId: ecm.model.desktop.getDefaultRepository().id,
-        			classSymbolicName: this.symbolicName,
-        			selectedLocale: ecm.model.desktop.valueFormatter.locale
-        	};
-        	
-			try {
-				var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",
-						params);
-				var resultSet = new ResultSet(response);
-				
-				return resultSet;
-			} catch (err) {
-				console.log(err);
-			}
-		},
-		
 		
 		
 		generalSearch :function(classSymbolicName,searchProperties){

@@ -2,6 +2,7 @@ package com.dataserve.se.db.command;
 
 import java.util.Set;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,12 +18,13 @@ public abstract class CommandBase implements Command {
 	protected PluginServiceCallbacks callBacks;
 	protected HttpServletResponse response;
 	protected String currentUserId;
-	
+	protected String calendarType;
 	
 	public CommandBase(HttpServletRequest request) {
 		this.request = request;
 		this.callBacks = (PluginServiceCallbacks)request.getAttribute("callBacks");
 		this.currentUserId = (String)request.getAttribute("curretUserId");
+		getCalendarType();
 	}
 	
 	
@@ -31,6 +33,7 @@ public abstract class CommandBase implements Command {
 		this.callBacks = callbacks;
 		this.response= response;
 		this.currentUserId = (String)request.getAttribute("curretUserId");
+		getCalendarType();
 	}
 	protected abstract Module getModule(); 
 	protected abstract ActionType getActionType();
@@ -74,5 +77,29 @@ public abstract class CommandBase implements Command {
 	@Override
 	public abstract String execute() throws Exception;
 	
+	public void getCalendarType() {
+//      // Get the current HTTP request
+//      HttpServletRequest httpRequest = callbacks.getHttpRequest(request);
+		
+      // Retrieve an array of all cookies sent by the client
+      Cookie[] cookies = request.getCookies();
+
+      // Specify the name of the calendar type cookie (replace with the actual cookie name)
+      String calendarTypeCookieName = "icn_calendar_type";
 	
+      // Initialize a variable to store the calendar type value
+//      String calendarType = null;
+
+      // Check if cookies are present
+      if (cookies != null) {
+          // Loop through the cookies to find the calendar type cookie
+          for (Cookie cookie : cookies) {
+              if (calendarTypeCookieName.equals(cookie.getName())) {
+                  // Found the calendar type cookie
+                  calendarType = cookie.getValue();
+                  break; // Exit the loop once found
+              }
+          }
+      }
+	}
 }

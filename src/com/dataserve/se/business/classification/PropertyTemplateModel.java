@@ -1,6 +1,7 @@
 package com.dataserve.se.business.classification;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,13 +15,14 @@ public class PropertyTemplateModel {
 
 	private PropertyTemplateBean bean;
 	private String classSymbolicName;
-
+	Locale locale ;
 	public PropertyTemplateModel(PropertyTemplateBean bean) throws ClassificationException {
 		this.bean = bean;
 	}
 
-	public PropertyTemplateModel(String classSymbolicName) {
+	public PropertyTemplateModel(Locale locale , String classSymbolicName) {
 		this.classSymbolicName = classSymbolicName;
+		this.locale = locale;
 	}
 
 
@@ -85,6 +87,7 @@ public class PropertyTemplateModel {
 		obj.put("maxValue", bean.getMaxValue());
 		obj.put("isRequired", bean.isRequired());
 		obj.put("depOn", bean.getDepOn());
+		obj.put("displayName", bean.getDisplayName());
 		return obj;
 	}
 

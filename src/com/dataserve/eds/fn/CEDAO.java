@@ -130,7 +130,19 @@ public class CEDAO {
 					// Custom PropertyDefinition object found
 					PropertyTemplateBean bean = new PropertyTemplateBean();
 					bean.setSymbolicName(objPropDef.get_SymbolicName());
-					bean.setDisplayName(objPropDef.get_DisplayName());
+					
+					PropertyTemplate propTemp = objPropDef.get_PropertyTemplate();
+					LocalizedStringList localizedStringList = propTemp.get_DisplayNames();
+					LocalizedString localizedString;
+					for (int i = 0; i < localizedStringList.size(); i++) {
+						localizedString = (LocalizedString) localizedStringList.get(i);
+						if(localizedString.get_LocaleName().contains(callBacks.getLocale().getLanguage())){
+							bean.setDisplayName(localizedString.get_LocalizedText());
+							break;
+						}
+					}
+					
+					//bean.setDisplayName(objPropDef.get_DisplayName());
 					
 					switch(objPropDef.get_DataType().getValue()){
 					case  8 : 
@@ -194,63 +206,6 @@ public class CEDAO {
 	
 
 	
-	public Map<String, String> fetchCustomClassPropertyDefinitionLocalization(String classSymbolicName, String selectedLocale)
-			throws FileNetException {
-		try {
-			Map<String, String> properties = new HashMap<String, String>();
-
-			Set<PropertyDefinition> propertyDefinitionList = new HashSet<PropertyDefinition>();
-			Subject subject = callBacks.getP8Subject(repositoryId);
-			UserContext.get().pushSubject(subject);
-			ObjectStore os = callBacks.getP8ObjectStore(repositoryId);
-			// Construct property filter to ensure PropertyDefinitions property
-			// of CD is returned as evaluated
-			PropertyFilter pf = new PropertyFilter();
-			pf.addIncludeType(0, null, Boolean.TRUE, FilteredPropertyType.ANY, null);
-
-			// Fetch selected class definition from the server
-			ClassDefinition objClassDef = Factory.ClassDefinition.fetchInstance(os, classSymbolicName, pf);
-			// Get PropertyDefinitions property from the property cache
-			PropertyDefinitionList objPropDefs = objClassDef.get_PropertyDefinitions();
-			
-
-
-			
-			Iterator iter = objPropDefs.iterator();
-			PropertyDefinition objPropDef = null;
-			
-			// Loop until property definition found
-			while (iter.hasNext()) {
-				objPropDef = (PropertyDefinition) iter.next();
-				if (!objPropDef.get_IsSystemOwned() && !objPropDef.get_IsHidden()
-						&& !objPropDef.get_SymbolicName().equals("SourceDocument")
-						&& !objPropDef.get_SymbolicName().equals("CmFederatedLockStatus")
-						&& !objPropDef.get_SymbolicName().equals("DocumentTitle")
-						&& !objPropDef.get_SymbolicName().equals("DestinationDocuments")
-						) {
-					PropertyTemplate propTemp = objPropDef.get_PropertyTemplate();
-					LocalizedStringList localizedStringList = propTemp.get_DisplayNames();
-					LocalizedString localizedString;
-					for (int i = 0; i < localizedStringList.size(); i++) {
-						localizedString = (LocalizedString) localizedStringList.get(i);
-						if(localizedString.get_LocaleName().contains(selectedLocale.toLowerCase())){						
-							properties.put(objPropDef.get_SymbolicName(), localizedString.get_LocalizedText());
-							break;
-						}
-					}
-					
-					
-				}
-			}
-			return properties;
-		} catch (EngineRuntimeException e) {
-			
-			throw new FileNetException("Error fetch Class Property Template symbloic Name  '"
-					+ classSymbolicName + "'", e);
-		} finally {
-			UserContext.get().popSubject();
-		}
-	}
 
 	/* static {
     instances = new HashMap();

@@ -26,7 +26,7 @@ public class GetClassProperty extends CommandBase {
 			classSymbolicName = request.getParameter("classSymbolicName");
 
 
-			PropertyTemplateModel propertyTemplateModel = new PropertyTemplateModel(classSymbolicName);
+			PropertyTemplateModel propertyTemplateModel = new PropertyTemplateModel(callBacks.getLocale(),classSymbolicName);
 			Set<PropertyTemplateModel> templateModels = propertyTemplateModel.GetClassProperty(repositoryId, callBacks,
 					classSymbolicName);
 			JSONArray jsonArray = new JSONArray();
@@ -56,7 +56,7 @@ public class GetClassProperty extends CommandBase {
 	}
 
 	@Override
-	protected com.dataserve.se.permissions.ActionType getActionType() {
+	protected ActionType getActionType() {
 		return null;
 	}
 }
