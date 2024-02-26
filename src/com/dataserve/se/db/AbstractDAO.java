@@ -12,7 +12,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.dataserve.se.util.ConfigManager;
 
 public abstract class AbstractDAO {
 	protected Connection con;
@@ -22,6 +21,7 @@ public abstract class AbstractDAO {
     public static final int TOMCAT = 1;
     public static final int WEB_LOGIC = 2;
     public static final int WEB_SPHERE = 3;
+	public static final String DATASOURCE_NAME = "ARCHIVE";
 
 	public AbstractDAO() throws DatabaseException {
 		initConn();
@@ -59,7 +59,7 @@ public abstract class AbstractDAO {
 	protected final void initConn() throws DatabaseException {
 		try {
 			if ((this.con == null) || (this.con.isClosed())) {
-				this.con = getConnection(ConfigManager.getDataSourceName());
+				this.con = getConnection(DATASOURCE_NAME);
 			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Error getting connection to database", e);

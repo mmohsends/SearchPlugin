@@ -4,13 +4,13 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.dataserve.se.util.ConfigManager;
 import com.dataserve.se.bean.User;
 import com.dataserve.se.business.classification.ClassificationException;
 import com.dataserve.se.business.classification.ClassificationModel;
 import com.dataserve.se.manager.UserManager;
 import com.dataserve.se.permissions.ActionType;
 import com.dataserve.se.permissions.Module;
+import com.dataserve.se.util.ConfigManager;
 import com.ibm.json.java.JSONArray;
 
 public class GetClassificationsByUser extends CommandBase {

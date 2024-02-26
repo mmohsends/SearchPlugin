@@ -2,7 +2,7 @@ package com.dataserve.se.business.classification;
 
 
 
-import com.dataserve.eds.fn.FileNetException;
+import com.dataserve.se.fn.FileNetException;
 
 public class ClassificationException extends Exception {
 

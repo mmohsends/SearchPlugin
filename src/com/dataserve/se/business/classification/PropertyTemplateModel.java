@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.dataserve.se.bean.PropertyTemplateBean;
 import com.dataserve.se.db.dao.PropertyTemplateDAO;
-import com.dataserve.eds.fn.CEDAO;
+import com.dataserve.se.fn.CEDAO;
 import com.ibm.ecm.extension.PluginServiceCallbacks;
 import com.ibm.json.java.JSONObject;
 

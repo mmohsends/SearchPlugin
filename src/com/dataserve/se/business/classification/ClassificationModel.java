@@ -6,13 +6,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-
-import com.dataserve.eds.fn.FileNetException;
-import com.dataserve.eds.fn.CEDAO;
 import com.dataserve.se.bean.ClassificationBean;
 import com.dataserve.se.bean.SaveType;
 import com.dataserve.se.db.ClassificationDAO;
 import com.dataserve.se.db.DatabaseException;
+import com.dataserve.se.fn.CEDAO;
+import com.dataserve.se.fn.FileNetException;
 import com.ibm.ecm.extension.PluginServiceCallbacks;
 import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;

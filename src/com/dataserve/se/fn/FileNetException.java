@@ -1,4 +1,4 @@
-package com.dataserve.eds.fn;
+package com.dataserve.se.fn;
 
 import com.filenet.api.exception.EngineRuntimeException;
 import com.filenet.api.exception.ExceptionCode;

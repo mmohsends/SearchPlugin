@@ -8,7 +8,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.dataserve.se.util.ConfigManager;
 
 
 public class ConnectionManager {
@@ -19,6 +18,7 @@ public class ConnectionManager {
 	private static final int TOMCAT = 1;
 	private static final int WEB_LOGIC = 2;
 	private static final int WEB_SPHERE = 3;
+	public static final String DATASOURCE_NAME = "ARCHIVE";
 
 	public Connection getCon() {
 		return con;
@@ -65,7 +65,7 @@ public class ConnectionManager {
 	public void initConn() throws DatabaseException {
 		try {
 			if ((this.con == null) || (this.con.isClosed())) {
-				this.con = openConnection(ConfigManager.getDataSourceName());
+				this.con = openConnection(DATASOURCE_NAME);
 				this.con.setAutoCommit(false);
 			}
 		} catch (SQLException e) {

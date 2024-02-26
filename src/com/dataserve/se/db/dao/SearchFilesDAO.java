@@ -3,14 +3,10 @@ package com.dataserve.se.db.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
-import com.dataserve.se.db.DatabaseException;
-import com.dataserve.se.util.ConfigManager;
 import com.dataserve.se.db.ConnectionManager;
+import com.dataserve.se.db.DatabaseException;
 
 public class SearchFilesDAO {
 	ConnectionManager dbConnection = null;
