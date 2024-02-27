@@ -226,12 +226,12 @@ public class SearchService  extends PluginService {
 	        stringBuilder.append("%'");
 	          
 	        return "SELECT    "
-	        		+ " [ClassDescription], [ClassificationStatus], [CmFederatedLockStatus], [CmIndexingFailureCode], [CmIsMarkedForDeletion], "
+	        		+ " [ClassDescription], [ClassificationStatus], [CmIndexingFailureCode], [CmIsMarkedForDeletion], "
 	        		+ "[CmRetentionDate], [ComponentBindingLabel], [CompoundDocumentState], [ContentRetentionDate], [ContentSize], [Creator], "
 	        		+ "[CurrentState], [DateCheckedIn], [DateContentLastAccessed], [DateCreated], [DateLastModified], [DocumentTitle], [EntryTemplateId], "
 	        		+ "[EntryTemplateLaunchedWorkflowNumber], [EntryTemplateObjectStoreName], [Id], [IgnoreRedirect], [IndexationId], [IsCurrentVersion],"
 	        		+ " [IsFrozenVersion], [IsInExceptionState], [IsReserved], [IsVersioningEnabled], [LastModifier], [LockOwner], [LockTimeout], [LockToken],"
-	        		+ " [MajorVersionNumber], [MimeType], [MinorVersionNumber], [Name], [Owner], [PublicationInfo], [ReservationType], [StorageLocation], [VersionStatus] "
+	        		+ " [MajorVersionNumber], [MimeType], [MinorVersionNumber], [Name], [Owner], [ReservationType], [StorageLocation], [VersionStatus] "
 	        		+ ""
 	        		+ "FROM Document T "
 	        		+ "INNER JOIN ContentSearch cs ON T.This = cs.QueriedObject " 
