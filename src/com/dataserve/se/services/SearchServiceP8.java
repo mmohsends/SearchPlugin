@@ -82,7 +82,7 @@ public class SearchServiceP8 {
 
 		// Retrieve the first pageSize results.
 		List<Object> searchResults = new ArrayList<Object>(pageSize);
-		IndependentObjectSet resultsObjectSet = searchScope.fetchObjects(searchSQL, pageSize, filter, true);
+		IndependentObjectSet resultsObjectSet = searchScope.fetchObjects(searchSQL, pageSize, null, true);
 		PageIterator pageIterator = resultsObjectSet.pageIterator();
 		int itemCount = 0;
 		if (pageIterator.nextPage()) {

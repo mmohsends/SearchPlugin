@@ -215,27 +215,25 @@ public class SearchService  extends PluginService {
 		}
 		
 		private String buildGeneralSearchQuery(ObjectStore os, String searchWord) {
-			StringBuilder stringBuilder = new StringBuilder();
-	       
-	        stringBuilder.append("[");
-	        stringBuilder.append("DocumentTitle");
-	        stringBuilder.append("]");
-	        stringBuilder.append(" like ");
-	        stringBuilder.append("'%");
-	        stringBuilder.append(searchWord);
-	        stringBuilder.append("%'");
+//			StringBuilder stringBuilder = new StringBuilder();
+//	       
+//	        stringBuilder.append("[");
+//	        stringBuilder.append("DocumentTitle");
+//	        stringBuilder.append("]");
+//	        stringBuilder.append(" like ");
+//	        stringBuilder.append("'%");
+//	        stringBuilder.append(searchWord);
+//	        stringBuilder.append("%'");
 	          
-	        return "SELECT    "
-	        		+ " [ClassDescription], [ClassificationStatus], [CmIndexingFailureCode], [CmIsMarkedForDeletion], "
-	        		+ "[CmRetentionDate], [ComponentBindingLabel], [CompoundDocumentState], [ContentRetentionDate], [ContentSize], [Creator], "
-	        		+ "[CurrentState], [DateCheckedIn], [DateContentLastAccessed], [DateCreated], [DateLastModified], [DocumentTitle], [EntryTemplateId], "
-	        		+ "[EntryTemplateLaunchedWorkflowNumber], [EntryTemplateObjectStoreName], [Id], [IgnoreRedirect], [IndexationId], [IsCurrentVersion],"
-	        		+ " [IsFrozenVersion], [IsInExceptionState], [IsReserved], [IsVersioningEnabled], [LastModifier], [LockOwner], [LockTimeout], [LockToken],"
-	        		+ " [MajorVersionNumber], [MimeType], [MinorVersionNumber], [Name], [Owner], [ReservationType], [StorageLocation], [VersionStatus] "
-	        		+ ""
-	        		+ "FROM Document T "
-	        		+ "INNER JOIN ContentSearch cs ON T.This = cs.QueriedObject " 
-	        		+ "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" ;
+	        return " SELECT d.[Name],d.[LockOwner],d.[ClassDescription],d.[CompoundDocumentState],d.[ContentSize],d.[Creator],d.[DateCreated],d.[DateLastModified],d.[DocumentTitle],d.[EntryTemplateId],d.[EntryTemplateLaunchedWorkflowNumber],d.[EntryTemplateObjectStoreName],d.[Id],d.[IsCurrentVersion],d.[IsReserved],d.[IsVersioningEnabled],d.[LastModifier],d.[MajorVersionNumber],d.[MimeType],d.[MinorVersionNumber],d.[Owner],d.[ReplicationGroup],d.[Reservation],d.[ReservationType],d.[VersionSeries],d.[VersionStatus] "
+	        		+ " FROM Document d "
+	        		+ " INNER JOIN ContentSearch cs on d.This = cs.QueriedObject "
+	        		+ " WHERE CONTAINS(d.*," + "'" + searchWord + "'" + ")" + " AND d.[VersionStatus] = 1 " ;
+	        		//+ " ORDER BY cs.[Rank] DESC";
+//	        		"SELECT   [ContentSize], [Creator], [DateCreated],[LockOwner],[LastModifier],[MajorVersionNumber],[MinorVersionNumber],[ReservationType],[MimeType],[ClassDescription],[DateLastModified], [DocumentTitle],  [Id], [Name]"
+//	        		+ " FROM Document T "
+//	        		+ "INNER JOIN ContentSearch cs ON T.This = cs.QueriedObject " 
+//	        		+ "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" ;
 	       // + " OR " + stringBuilder;
 		    		
 	}
