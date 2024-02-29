@@ -225,7 +225,7 @@ public class SearchService  extends PluginService {
 //	        stringBuilder.append(searchWord);
 //	        stringBuilder.append("%'");
 	          
-	        return " SELECT d.[Name],d.[LockOwner],d.[ClassDescription],d.[CompoundDocumentState],d.[ContentSize],d.[Creator],d.[DateCreated],d.[DateLastModified],d.[DocumentTitle],d.[EntryTemplateId],d.[EntryTemplateLaunchedWorkflowNumber],d.[EntryTemplateObjectStoreName],d.[Id],d.[IsCurrentVersion],d.[IsReserved],d.[IsVersioningEnabled],d.[LastModifier],d.[MajorVersionNumber],d.[MimeType],d.[MinorVersionNumber],d.[Owner],d.[ReplicationGroup],d.[Reservation],d.[ReservationType],d.[VersionSeries],d.[VersionStatus] "
+	        return " SELECT d.[Name],d.[LockOwner],d.[ClassDescription],d.[CompoundDocumentState],d.[ContentSize],d.[Creator],d.[DateCreated],d.[DateLastModified],d.[DocumentTitle],d.[Id],d.[IsCurrentVersion],d.[IsReserved],d.[IsVersioningEnabled],d.[LastModifier],d.[MajorVersionNumber],d.[MimeType],d.[MinorVersionNumber],d.[Owner],d.[ReplicationGroup],d.[Reservation],d.[ReservationType],d.[VersionSeries],d.[VersionStatus] "
 	        		+ " FROM Document d "
 	        		+ " INNER JOIN ContentSearch cs on d.This = cs.QueriedObject "
 	        		+ " WHERE CONTAINS(d.*," + "'" + searchWord + "'" + ")" + " AND d.[VersionStatus] = 1 " ;
