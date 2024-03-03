@@ -445,19 +445,29 @@ define([
 		        // Check if the field is a choice list
 		        if (choiceList) {
 		            element = document.createElement('select');
+		            var emptyElement = document.createElement('option');
+		            emptyElement.value = "";
+		            emptyElement.textContent = "";
+	                element.appendChild(emptyElement);
+	                
 		            item.choiceListBeans.forEach(function(option) {
 		                var optionElement = document.createElement('option');
 		                optionElement.value = option.value;
 		                optionElement.textContent = option.dispName;
 		                element.appendChild(optionElement);
 		            });
-		        } else if (["String", "Integer", "Float"].includes(dataType)) {
-		            element = document.createElement('input');
-		            element.type = 'text';
-		        } else if (dataType === "Date") {
-		            element = document.createElement('input');
-		            element.type = 'date';
+		        } else {
+		        	if (["String", "Integer", "Float"].includes(dataType)) {
+			            element = document.createElement('input');
+			            element.type = 'text';
+			        } else if (dataType === "Date") {
+			            element = document.createElement('input');
+			            element.type = 'date';
+			        }
+		        	
 		        }
+		        
+		        
 
 		        if (element) {
 		            element.setAttribute('data-symbolic-name', symbolicName);

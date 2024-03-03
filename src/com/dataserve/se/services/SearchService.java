@@ -198,14 +198,14 @@ public class SearchService  extends PluginService {
 		        String strKey = (String) currentKey;
 		        List<?> value = (List<?>)searchProperties.get(currentKey);
 			    if(value.get(1).toString().equalsIgnoreCase("String") ) {
-		    		sqlQuery += "DocumentTitle LIKE '%" + value.get(0).toString() +"%' OR ";
+		    		sqlQuery += strKey+ " LIKE '%" + value.get(0).toString() +"%' AND ";
 		   		 }
 			    else if(value.get(1).toString().equalsIgnoreCase("Date")) {
 		    		String dateConv = FileNetDateConverter.toFileNetDate(value.get(0).toString());
-		    		sqlQuery += strKey+ " = " + dateConv +" OR ";
+		    		sqlQuery += strKey+ " = " + dateConv +" AND ";
 		    	}
 			    else if(value.get(1).toString().equalsIgnoreCase("Float") || value.get(1).toString().equalsIgnoreCase("Integer") ){
-		    		sqlQuery += strKey+ " = " + value.get(0).toString() +" OR ";
+		    		sqlQuery += strKey+ " = " + value.get(0).toString() +" AND ";
 			    }
 		    }
 		    
