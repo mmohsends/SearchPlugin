@@ -9,7 +9,7 @@ public class FileNetDateConverter {
 		String dateString = strDate;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate fromdDate = LocalDate.parse(dateString, formatter);
-        String stFromDate = fromdDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String stFromDate = fromdDate.minusDays(1).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         stFromDate += "T210000Z";
         return stFromDate;
 	}
