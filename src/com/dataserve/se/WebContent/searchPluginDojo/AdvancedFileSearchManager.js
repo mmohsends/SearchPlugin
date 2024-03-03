@@ -261,9 +261,133 @@ define([
 			return results;
 		},
 		
+//
+//		getClassCustomProperty: function(classSymbolicName) {
+//			var that = this;
+//		    var data = this.getClassCustomPropertyData(classSymbolicName);
+//
+//		    var container = document.getElementById('ProertyDataGrideDiv');
+//		    if (!container) {
+//		        console.error('ProertyDataGrideDiv is not a valid DOM element');
+//		        return;
+//		    }
+//
+//		    // Clear existing content
+//		    container.innerHTML = '';
+//
+//		    // Create the fixed Document Title field
+//		    var titleContainer = document.createElement('div');
+//		    titleContainer.style.marginBottom = '10px';
+//		    
+//		    var titleLabel = document.createElement('label');
+//		    titleLabel.textContent = this._lcl.DOC_TITLE;
+//		    titleLabel.style.marginRight = '5px';
+//		    titleContainer.appendChild(titleLabel);
+//		    
+//		    var titleInput = document.createElement('input');
+//		    titleInput.type = 'text';
+//		    titleInput.setAttribute('data-symbolic-name', 'DocumentTitle');
+//		    titleInput.setAttribute('data-symbolic-name-dataType', "String");
+//		    titleInput.style.padding = '5px';
+//		    titleInput.style.border = '1px solid #ccc';
+//		    titleInput.style.borderRadius = '4px';
+//		    titleInput.style.width = 'calc(100% - 60px)';
+//		    titleContainer.appendChild(titleInput);
+//
+//		    container.appendChild(titleContainer);
+//
+//		    // Create a row to hold pairs of elements
+//		    var rowDiv = document.createElement('div');
+//		    rowDiv.style.display = 'flex';
+//		    rowDiv.style.justifyContent = 'space-between';
+//		    rowDiv.style.flexWrap = 'wrap';
+//
+//		    data.forEach(function(item, index) {
+//		        var dataType = item.dataType;
+//		        var symbolicName = item.symbolicName;  // Define symbolicName here
+//		        var choiceList = item.isChoiceList;
+//
+//		        
+//
+//		        var inputContainer = document.createElement('div');
+//		        inputContainer.style.flex = '1 1 45%';
+//		        inputContainer.style.marginBottom = '10px';
+//		        
+//		        var label = document.createElement('label');
+//		       // label.textContent = symbolicName + ' (' + dataType + '): ';
+//		        label.textContent = item.displayName;
+//		        label.style.marginRight = '5px';
+//		        inputContainer.appendChild(label);
+//
+//		        var element;
+//		        if (["String", "Integer", "Float"].includes(dataType)) {
+//		            element = document.createElement('input');
+//		            element.type = 'text';
+//		        } else if (dataType === "Date") {
+//		            element = document.createElement('input');
+//		            element.type = 'date';
+//		        }
+//
+//		        if (element) {
+//		            element.setAttribute('data-symbolic-name', symbolicName);
+//		            element.setAttribute('data-symbolic-name-dataType', dataType);
+//		            element.style.padding = '5px';
+//		            element.style.border = '1px solid #ccc';
+//		            element.style.borderRadius = '4px';
+//		            element.style.width = 'calc(100% - 60px)';
+//		            inputContainer.appendChild(element);
+//		        }
+//
+//		        rowDiv.appendChild(inputContainer);
+//
+//		        if (index % 2 === 1 || index === data.length - 1) {
+//		            container.appendChild(rowDiv);
+//		            rowDiv = document.createElement('div');
+//		            rowDiv.style.display = 'flex';
+//		            rowDiv.style.justifyContent = 'space-between';
+//		            rowDiv.style.flexWrap = 'wrap';
+//		        }
+//		    });
+//
+//		    var submitButton = document.createElement('button');
+//		    submitButton.textContent = this._lcl.SEARCH;
+//		    submitButton.id = 'submitButton';
+//		    submitButton.style.cssText = 'margin-top: 20px; background-color: #20365b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold;';
+//		    container.appendChild(submitButton);
+//
+//		    // Event listener for the button
+//		    submitButton.addEventListener('click', function() {
+//		        var searchProperties = {};
+//		        var inputs = container.querySelectorAll('input[type=text], input[type=date]');
+//
+//		        inputs.forEach(function(input) {
+//		            var key = input.getAttribute('data-symbolic-name');
+//		            var keyType = input.getAttribute('data-symbolic-name-dataType');
+//		            if (input !== titleInput && input.value.trim() !== '') { // Check if input value is not empty
+//		                searchProperties[key] = [input.value,keyType];
+//		            }
+//		        });
+//
+//		        var inputData = {
+//		            classSymbolicName: classSymbolicName,
+//		            searchProperties: searchProperties
+//		        };
+//
+//		        // Add the titleInput data separately to searchProperties
+//		        if (titleInput.value.trim() !== '') {
+//		            var docTitlekeyType = titleInput.getAttribute('data-symbolic-name-dataType');
+//		            inputData.searchProperties['DocumentTitle'] = [titleInput.value,docTitlekeyType];
+//		        }
+//
+//		        that.saveSearchProperties(inputData.classSymbolicName,inputData.searchProperties)
+//		        that.generalSearch(inputData.classSymbolicName,inputData.searchProperties);
+//		        
+//		    });
+//		},
 
+		
 		getClassCustomProperty: function(classSymbolicName) {
-			var that = this;
+		    var that = this;
 		    var data = this.getClassCustomPropertyData(classSymbolicName);
 
 		    var container = document.getElementById('ProertyDataGrideDiv');
@@ -278,12 +402,12 @@ define([
 		    // Create the fixed Document Title field
 		    var titleContainer = document.createElement('div');
 		    titleContainer.style.marginBottom = '10px';
-		    
+
 		    var titleLabel = document.createElement('label');
 		    titleLabel.textContent = this._lcl.DOC_TITLE;
 		    titleLabel.style.marginRight = '5px';
 		    titleContainer.appendChild(titleLabel);
-		    
+
 		    var titleInput = document.createElement('input');
 		    titleInput.type = 'text';
 		    titleInput.setAttribute('data-symbolic-name', 'DocumentTitle');
@@ -304,20 +428,30 @@ define([
 
 		    data.forEach(function(item, index) {
 		        var dataType = item.dataType;
-		        var symbolicName = item.symbolicName;  // Define symbolicName here
+		        var symbolicName = item.symbolicName; // Define symbolicName here
+		        var choiceList = item.isChoiceList;
 
 		        var inputContainer = document.createElement('div');
 		        inputContainer.style.flex = '1 1 45%';
 		        inputContainer.style.marginBottom = '10px';
-		        
+
 		        var label = document.createElement('label');
-		       // label.textContent = symbolicName + ' (' + dataType + '): ';
 		        label.textContent = item.displayName;
 		        label.style.marginRight = '5px';
 		        inputContainer.appendChild(label);
 
 		        var element;
-		        if (["String", "Integer", "Float"].includes(dataType)) {
+
+		        // Check if the field is a choice list
+		        if (choiceList) {
+		            element = document.createElement('select');
+		            item.choiceListBeans.forEach(function(option) {
+		                var optionElement = document.createElement('option');
+		                optionElement.value = option.value;
+		                optionElement.textContent = option.dispName;
+		                element.appendChild(optionElement);
+		            });
+		        } else if (["String", "Integer", "Float"].includes(dataType)) {
 		            element = document.createElement('input');
 		            element.type = 'text';
 		        } else if (dataType === "Date") {
@@ -355,13 +489,19 @@ define([
 		    // Event listener for the button
 		    submitButton.addEventListener('click', function() {
 		        var searchProperties = {};
-		        var inputs = container.querySelectorAll('input[type=text], input[type=date]');
+		        var inputs = container.querySelectorAll('input[type=text], input[type=date], select');
 
 		        inputs.forEach(function(input) {
 		            var key = input.getAttribute('data-symbolic-name');
 		            var keyType = input.getAttribute('data-symbolic-name-dataType');
 		            if (input !== titleInput && input.value.trim() !== '') { // Check if input value is not empty
-		                searchProperties[key] = [input.value,keyType];
+		                if (input.tagName.toLowerCase() === 'select') {
+//		                    searchProperties[key] = [input.options[input.selectedIndex].text, keyType];
+		                    searchProperties[key] = [input.options[input.selectedIndex].value, keyType];
+
+		                } else {
+		                    searchProperties[key] = [input.value, keyType];
+		                }
 		            }
 		        });
 
@@ -373,12 +513,11 @@ define([
 		        // Add the titleInput data separately to searchProperties
 		        if (titleInput.value.trim() !== '') {
 		            var docTitlekeyType = titleInput.getAttribute('data-symbolic-name-dataType');
-		            inputData.searchProperties['DocumentTitle'] = [titleInput.value,docTitlekeyType];
+		            inputData.searchProperties['DocumentTitle'] = [titleInput.value, docTitlekeyType];
 		        }
+		        that.saveSearchProperties(inputData.classSymbolicName, inputData.searchProperties)
+		        that.generalSearch(inputData.classSymbolicName, inputData.searchProperties);
 
-		        that.saveSearchProperties(inputData.classSymbolicName,inputData.searchProperties)
-		        that.generalSearch(inputData.classSymbolicName,inputData.searchProperties);
-		        
 		    });
 		},
 

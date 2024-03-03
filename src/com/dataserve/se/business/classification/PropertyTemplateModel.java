@@ -5,10 +5,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import com.dataserve.se.bean.ChoiceListBean;
 import com.dataserve.se.bean.PropertyTemplateBean;
 import com.dataserve.se.db.dao.PropertyTemplateDAO;
 import com.dataserve.se.fn.CEDAO;
 import com.ibm.ecm.extension.PluginServiceCallbacks;
+import com.ibm.json.java.JSONArray;
 import com.ibm.json.java.JSONObject;
 
 public class PropertyTemplateModel {
@@ -37,7 +39,7 @@ public class PropertyTemplateModel {
 			if (templateBeans != null && templateBeans.size() > 0) {
 				PropertyTemplateDAO propertyTemplateDAO = new PropertyTemplateDAO();
 				// get class property from db
-				Map<String, PropertyTemplateBean> dbPropertyMap = propertyTemplateDAO.GetClassProperty(classSymbolicName);
+				Map<String, PropertyTemplateBean> dbPropertyMap = propertyTemplateDAO.GetClassProperty(classSymbolicName,callBacks);
 
 				for (PropertyTemplateBean propertyTemplateBean : templateBeans) {
 					PropertyTemplateBean bean = dbPropertyMap.get(propertyTemplateBean.getSymbolicName());
@@ -48,6 +50,10 @@ public class PropertyTemplateModel {
 						}
 						if ( bean.isChoiceList()){
 							propertyTemplateBean.setChoiceList(bean.isChoiceList());
+						}
+						System.out.println("ChoiceListBean>>>>>>>>>>>>>    "+bean.getChoiceListBeans());
+						if (bean.getChoiceListBeans() != null  && !bean.getChoiceListBeans().isEmpty()){
+							propertyTemplateBean.setChoiceListBeans(bean.getChoiceListBeans());
 						}
 						if(bean.getDepOn() !=null && !bean.getDepOn().equals("")){
 							propertyTemplateBean.setDepOn(bean.getDepOn());
@@ -88,6 +94,32 @@ public class PropertyTemplateModel {
 		obj.put("isRequired", bean.isRequired());
 		obj.put("depOn", bean.getDepOn());
 		obj.put("displayName", bean.getDisplayName());
+		
+		JSONArray choiceListObj = new JSONArray();
+		
+//		System.out.println("bean.getChoiceListBeans()");
+		
+		if(bean.isChoiceList() && bean.getChoiceListBeans() != null && !bean.getChoiceListBeans().isEmpty()) {
+		
+		for (ChoiceListBean choice : bean.getChoiceListBeans()) {
+			
+			System.out.println("bean.getChoiceListBeans()" + choice.getDispName());
+		    // Creating a JSONObject for each ChoiceListBean
+		    JSONObject jsonObject = new JSONObject();
+		    jsonObject.put("lang", choice.getLang());
+		    jsonObject.put("dispName", choice.getDispName());
+		    jsonObject.put("value", choice.getValue());
+		    jsonObject.put("depOn", choice.getDepOn());
+		    jsonObject.put("depValue", choice.getDepValue());
+
+		    // Adding the JSONObject to the JSONArray
+		    choiceListObj.add(jsonObject);
+		}
+		
+		}
+		obj.put("choiceListBeans", choiceListObj);
+		
+		
 		return obj;
 	}
 

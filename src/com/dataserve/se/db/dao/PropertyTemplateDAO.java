@@ -4,16 +4,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.dataserve.se.bean.ChoiceListBean;
 import com.dataserve.se.bean.ClassificationBean;
+import com.dataserve.se.bean.ConfigBean;
 import com.dataserve.se.bean.PropertyTemplateBean;
 import com.dataserve.se.db.AbstractDAO;
 import com.dataserve.se.db.DatabaseException;
+import com.ibm.ecm.extension.PluginServiceCallbacks;
 
 public class PropertyTemplateDAO extends AbstractDAO {
 
@@ -115,13 +120,14 @@ public class PropertyTemplateDAO extends AbstractDAO {
 		}
 	}
 	
-	public Map<String, PropertyTemplateBean> GetClassProperty(String classSymbolicName) throws DatabaseException {
+	public Map<String, PropertyTemplateBean> GetClassProperty(String classSymbolicName, PluginServiceCallbacks  callBacks) throws DatabaseException {
 		try {
 			stmt = con.prepareStatement("SELECT OBJECTTYPE,PROPERTY,DISPMODE,REQUIRED,HIDDEN ,MAXVAL,MINVAL,MAXLEN,"
 					+ "FORMAT,FORMATDESC,HASDEPENDANT ,IS_CHOICE_LIST , DEPON FROM EDS" + " WHERE EDS.OBJECTTYPE = ? ");
 
 			stmt.setString(1, classSymbolicName);
-			rs = stmt.executeQuery();
+			rs = stmt.executeQuery(); 
+			
 			Map<String, PropertyTemplateBean> beans = new HashMap<String, PropertyTemplateBean>();
 			while (rs.next()) {
 				PropertyTemplateBean bean = new PropertyTemplateBean();
@@ -138,7 +144,29 @@ public class PropertyTemplateDAO extends AbstractDAO {
 				bean.setMaxLength(rs.getInt("MAXLEN"));
 				bean.setChoiceList(rs.getBoolean("IS_CHOICE_LIST"));
 				bean.setDepOn(rs.getString("DEPON"));
-				beans.put(bean.getSymbolicName(), bean);
+				if(bean.isChoiceList()) {
+					PreparedStatement stmt2 = null;
+					stmt2 = con.prepareStatement("SELECT LANG , DISPNAME , VALUE , DEPON , DEPVALUE FROM  [dbo].[EDS_CHOICES] WHERE OBJECTTYPE = ? and PROPERTY = ? and LANG =?");
+					stmt2.setString(1, classSymbolicName);
+					stmt2.setString(2,bean.getSymbolicName());
+					stmt2.setString(3,callBacks.getLocale().getLanguage() ); 
+					
+					ResultSet res = stmt2.executeQuery(); 
+					List<ChoiceListBean> choiceListBeans = new ArrayList<ChoiceListBean>();
+					while (res.next()) {	
+						ChoiceListBean choiceListBean = new ChoiceListBean();
+						choiceListBean.setLang(res.getNString("LANG"));
+						choiceListBean.setDispName(res.getNString("DISPNAME"));
+						choiceListBean.setValue(res.getNString("VALUE"));
+						choiceListBean.setDepOn(res.getNString("DEPON"));
+						choiceListBean.setDepValue(res.getNString("DEPVALUE"));
+						choiceListBeans.add(choiceListBean);
+					}
+					bean.setChoiceListBeans(choiceListBeans);
+				}
+				
+				beans.put(bean.getSymbolicName(), bean);		
+				
 			}
 			return beans;
 		} catch (SQLException e) {
@@ -149,6 +177,7 @@ public class PropertyTemplateDAO extends AbstractDAO {
 			releaseResources();
 		}
 	}
+	
 
 	/**
 	 * check if class property have choice list values

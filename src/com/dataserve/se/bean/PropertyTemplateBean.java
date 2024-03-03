@@ -1,5 +1,6 @@
 package com.dataserve.se.bean;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -15,6 +16,8 @@ public class PropertyTemplateBean extends AbstractBean{
 	private boolean isHidden;
 
 	private String classSymbolicName;
+	
+	private List<ChoiceListBean> choiceListBeans;
 	
 	
 	//EDS Attributes
@@ -99,7 +102,8 @@ public class PropertyTemplateBean extends AbstractBean{
 	public void setChoiceList(boolean isChoiceList) {
 		this.isChoiceList = isChoiceList;
 	}
-
+	
+ 
 	public String getDefaultVal() {
 		return defaultVal;
 	}
@@ -195,6 +199,16 @@ public class PropertyTemplateBean extends AbstractBean{
 	public void setClassSymbolicNames(Set<String> classSymbolicNames) {
 		this.classSymbolicNames = classSymbolicNames;
 	}
+
+	public List<ChoiceListBean> getChoiceListBeans() {
+		return choiceListBeans;
+	}
+
+	public void setChoiceListBeans(List<ChoiceListBean> choiceListBeans) {
+		this.choiceListBeans = choiceListBeans;
+	}
+	
+	
 
 	
 
