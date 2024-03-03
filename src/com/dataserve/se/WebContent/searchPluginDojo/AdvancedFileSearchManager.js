@@ -163,12 +163,12 @@ define([
 
             // Create a scrollable container for the tree
             var treeScrollContainer = new ContentPane({
-                style: "max-height: 500px; overflow: auto;max-width: fit-content",
+                style: "height: 100%; overflow: auto;",
                 content: this.tree
             });
 
             this.tooltipDialog = new TooltipDialog({
-                style: "width: 300px;" // Adjust width as needed
+                style: "width: 500px;height: 400px" // Adjust width as needed
             });
 
             // Append the widgets to the TooltipDialog's container node
