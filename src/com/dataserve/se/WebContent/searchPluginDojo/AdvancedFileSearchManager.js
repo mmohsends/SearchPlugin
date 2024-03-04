@@ -28,6 +28,7 @@ define([
     "dijit/tree/ForestStoreModel",
     "dojo/store/Observable",
     "dijit/form/ComboBox",
+    "dojo/cookie",
     "dijit/form/DropDownButton",
     "dijit/TooltipDialog",
     "dijit/_TemplatedMixin",
@@ -69,6 +70,7 @@ define([
     ForestStoreModel,
     Observable,
     ComboBox,
+    cookie,
     DropDownButton,
     TooltipDialog,
     _TemplatedMixin,
@@ -389,25 +391,20 @@ define([
 		getClassCustomProperty: function(classSymbolicName) {
 		    var that = this;
 		    var data = this.getClassCustomPropertyData(classSymbolicName);
-
 		    var container = document.getElementById('ProertyDataGrideDiv');
 		    if (!container) {
 		        console.error('ProertyDataGrideDiv is not a valid DOM element');
 		        return;
 		    }
-
 		    // Clear existing content
 		    container.innerHTML = '';
-
 		    // Create the fixed Document Title field
 		    var titleContainer = document.createElement('div');
 		    titleContainer.style.marginBottom = '10px';
-
 		    var titleLabel = document.createElement('label');
 		    titleLabel.textContent = this._lcl.DOC_TITLE;
 		    titleLabel.style.marginRight = '5px';
 		    titleContainer.appendChild(titleLabel);
-
 		    var titleInput = document.createElement('input');
 		    titleInput.type = 'text';
 		    titleInput.setAttribute('data-symbolic-name', 'DocumentTitle');
@@ -417,58 +414,86 @@ define([
 		    titleInput.style.borderRadius = '4px';
 		    titleInput.style.width = 'calc(100% - 60px)';
 		    titleContainer.appendChild(titleInput);
-
 		    container.appendChild(titleContainer);
-
 		    // Create a row to hold pairs of elements
 		    var rowDiv = document.createElement('div');
 		    rowDiv.style.display = 'flex';
 		    rowDiv.style.justifyContent = 'space-between';
 		    rowDiv.style.flexWrap = 'wrap';
-
+		    // Assume getCookie function exists or implement it to read cookie values
+		    var useUmmAlQuraCalendar = cookie(ecm.model.Desktop.cookieCalendarType) == "UmmAlQura"; // Placeholder for cookie check
+		    var statmentReportDate_Str;
 		    data.forEach(function(item, index) {
-		        var dataType = item.dataType;
-		        var symbolicName = item.symbolicName; // Define symbolicName here
-		        var choiceList = item.isChoiceList;
-
-		        var inputContainer = document.createElement('div');
-		        inputContainer.style.flex = '1 1 45%';
-		        inputContainer.style.marginBottom = '10px';
-
-		        var label = document.createElement('label');
-		        label.textContent = item.displayName;
-		        label.style.marginRight = '5px';
-		        inputContainer.appendChild(label);
-
-		        var element;
-
-		        // Check if the field is a choice list
-		        if (choiceList) {
-		            element = document.createElement('select');
-		            var emptyElement = document.createElement('option');
-		            emptyElement.value = "";
-		            emptyElement.textContent = "";
-	                element.appendChild(emptyElement);
-	                
-		            item.choiceListBeans.forEach(function(option) {
-		                var optionElement = document.createElement('option');
-		                optionElement.value = option.value;
-		                optionElement.textContent = option.dispName;
-		                element.appendChild(optionElement);
-		            });
-		        } else {
-		        	if (["String", "Integer", "Float"].includes(dataType)) {
-			            element = document.createElement('input');
-			            element.type = 'text';
-			        } else if (dataType === "Date") {
-			            element = document.createElement('input');
-			            element.type = 'date';
-			        }
-		        	
+					var dataType = item.dataType;
+					var symbolicName = item.symbolicName; // Define symbolicName here
+					var choiceList = item.isChoiceList;
+					
+					var inputContainer = document.createElement('div');
+					inputContainer.style.flex = '1 1 45%';
+					inputContainer.style.marginBottom = '10px';
+					
+					var label = document.createElement('label');
+					label.textContent = item.displayName;
+					label.style.marginRight = '5px';
+					inputContainer.appendChild(label);
+					
+					var element;
+					
+					// Check if the field is a choice list
+					if (choiceList) {
+						element = document.createElement('select');
+						var emptyElement = document.createElement('option');
+						emptyElement.value = "";
+						emptyElement.textContent = "";
+						element.appendChild(emptyElement);
+						
+						item.choiceListBeans.forEach(function(option) {
+							var optionElement = document.createElement('option');
+							optionElement.value = option.value;
+							optionElement.textContent = option.dispName;
+							element.appendChild(optionElement);
+						});
+					} else {
+						if (["String", "Integer", "Float"].includes(dataType)) {
+							element = document.createElement('input');
+							element.type = 'text';		          
+						} else if (dataType === "Date") {
+//		                element = document.createElement('input');
+		                if (useUmmAlQuraCalendar) {
+		        			this.statmentReportDateHijri =  new dijit.form.DateTextBox({
+		        				datePackage:  "dojox.date.umalqura",
+		        				constraints:{datePattern:'yyyy-MM-dd', strict:true, max : new dojox.date.umalqura.Date()},
+		        				 onChange : function(valuee) {
+		        					 statmentReportDate_Str = dojo.date.locale.format(new Date(valuee), {datePattern: "yyyy-MM-dd", selector: "date"});
+		        					 
+		        					}
+		        				
+		        			});
+		        			this.statmentReportDateHijri.setAttribute('data-symbolic-name', symbolicName);
+		        			this.statmentReportDateHijri.setAttribute('data-symbolic-name-dataType', dataType);
+		        			this.statmentReportDateHijri.style.padding = '5px';
+		        			this.statmentReportDateHijri.style.border = '1px solid #ccc';
+		        			this.statmentReportDateHijri.style.borderRadius = '4px';
+		        			this.statmentReportDateHijri.style.width = 'calc(100% - 60px)';
+		        			this.statmentReportDateHijri.placeAt(inputContainer);
+		                } else {
+		                	this.statmentReportDate =  new dijit.form.DateTextBox({
+		        				constraints:{datePattern:'yyyy-MM-dd', strict:true,  max : new Date()},
+		        				 onChange : function(valuee) {
+		        					 statmentReportDate_Str = dojo.date.locale.format(new Date(valuee), {datePattern: "yyyy-MM-dd", selector: "date"});
+		        					}	
+		        			});
+		                	
+		                	this.statmentReportDate.setAttribute('data-symbolic-name', symbolicName);
+		        			this.statmentReportDate.setAttribute('data-symbolic-name-dataType', dataType);
+		        			this.statmentReportDate.style.padding = '5px';
+		        			this.statmentReportDate.style.border = '1px solid #ccc';
+		        			this.statmentReportDate.style.borderRadius = '4px';
+		        			this.statmentReportDate.style.width = 'calc(100% - 60px)';
+		        			this.statmentReportDate.placeAt(inputContainer);
+		                }
+		            }
 		        }
-		        
-		        
-
 		        if (element) {
 		            element.setAttribute('data-symbolic-name', symbolicName);
 		            element.setAttribute('data-symbolic-name-dataType', dataType);
@@ -478,9 +503,7 @@ define([
 		            element.style.width = 'calc(100% - 60px)';
 		            inputContainer.appendChild(element);
 		        }
-
 		        rowDiv.appendChild(inputContainer);
-
 		        if (index % 2 === 1 || index === data.length - 1) {
 		            container.appendChild(rowDiv);
 		            rowDiv = document.createElement('div');
@@ -489,37 +512,44 @@ define([
 		            rowDiv.style.flexWrap = 'wrap';
 		        }
 		    });
-
+		   
 		    var submitButton = document.createElement('button');
 		    submitButton.textContent = this._lcl.SEARCH;
 		    submitButton.id = 'submitButton';
-		    submitButton.style.cssText = 'margin-top: 20px; background-color: #20365b; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold;';
+		    submitButton.style.cssText = 'margin-top: 20px; background-color: #20365B; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold;';
 		    container.appendChild(submitButton);
-
 		    // Event listener for the button
 		    submitButton.addEventListener('click', function() {
 		        var searchProperties = {};
 		        var inputs = container.querySelectorAll('input[type=text], input[type=date], select');
-
 		        inputs.forEach(function(input) {
 		            var key = input.getAttribute('data-symbolic-name');
 		            var keyType = input.getAttribute('data-symbolic-name-dataType');
-		            if (input !== titleInput && input.value.trim() !== '') { // Check if input value is not empty
-		                if (input.tagName.toLowerCase() === 'select') {
-//		                    searchProperties[key] = [input.options[input.selectedIndex].text, keyType];
-		                    searchProperties[key] = [input.options[input.selectedIndex].value, keyType];
+		            // Check if input value is not empty and not the title input
+		            if (input !== titleInput && input.value.trim() !== '') {
+		                // Exclude specific class names
+		                if(input.className !== 'dijitReset dijitInputField dijitValidationIcon dijitValidationInner'
+		                    && input.className !== 'dijitReset dijitInputField dijitArrowButtonInner'){
 
-		                } else {
-		                    searchProperties[key] = [input.value, keyType];
+		                    // Check if the input is a 'select' tag
+		                    if (input.tagName.toLowerCase() === 'select') {
+		                        searchProperties[key] = [input.options[input.selectedIndex].value, keyType];
+		                    } else {
+		                        // Here, you add an additional check for input type 'date'
+		                        if(keyType === 'Date') {
+		                            searchProperties[key] = [statmentReportDate_Str, keyType];
+		                        } else {
+		                            // For other input types, use the value directly
+		                            searchProperties[key] = [input.value, keyType];
+		                        }
+		                    }
 		                }
 		            }
 		        });
-
 		        var inputData = {
 		            classSymbolicName: classSymbolicName,
 		            searchProperties: searchProperties
 		        };
-
 		        // Add the titleInput data separately to searchProperties
 		        if (titleInput.value.trim() !== '') {
 		            var docTitlekeyType = titleInput.getAttribute('data-symbolic-name-dataType');
@@ -527,7 +557,6 @@ define([
 		        }
 		        that.saveSearchProperties(inputData.classSymbolicName, inputData.searchProperties)
 		        that.generalSearch(inputData.classSymbolicName, inputData.searchProperties);
-
 		    });
 		},
 
