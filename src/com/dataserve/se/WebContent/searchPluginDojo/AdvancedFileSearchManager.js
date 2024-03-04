@@ -460,38 +460,23 @@ define([
 						} else if (dataType === "Date") {
 //		                element = document.createElement('input');
 		                if (useUmmAlQuraCalendar) {
-		        			this.statmentReportDateHijri =  new dijit.form.DateTextBox({
+		        			this.datField =  new dijit.form.DateTextBox({
 		        				datePackage:  "dojox.date.umalqura",
-		        				constraints:{datePattern:'yyyy-MM-dd', strict:true, max : new dojox.date.umalqura.Date()},
-		        				 onChange : function(valuee) {
-		        					 statmentReportDate_Str = dojo.date.locale.format(new Date(valuee), {datePattern: "yyyy-MM-dd", selector: "date"});
-		        					 
-		        					}
-		        				
+		        				constraints:{datePattern:'yyyy-MM-dd', strict:true, max : new dojox.date.umalqura.Date()},	        				 		        				
 		        			});
-		        			this.statmentReportDateHijri.setAttribute('data-symbolic-name', symbolicName);
-		        			this.statmentReportDateHijri.setAttribute('data-symbolic-name-dataType', dataType);
-		        			this.statmentReportDateHijri.style.padding = '5px';
-		        			this.statmentReportDateHijri.style.border = '1px solid #ccc';
-		        			this.statmentReportDateHijri.style.borderRadius = '4px';
-		        			this.statmentReportDateHijri.style.width = 'calc(100% - 60px)';
-		        			this.statmentReportDateHijri.placeAt(inputContainer);
+		        			
 		                } else {
-		                	this.statmentReportDate =  new dijit.form.DateTextBox({
-		        				constraints:{datePattern:'yyyy-MM-dd', strict:true,  max : new Date()},
-		        				 onChange : function(valuee) {
-		        					 statmentReportDate_Str = dojo.date.locale.format(new Date(valuee), {datePattern: "yyyy-MM-dd", selector: "date"});
-		        					}	
-		        			});
-		                	
-		                	this.statmentReportDate.setAttribute('data-symbolic-name', symbolicName);
-		        			this.statmentReportDate.setAttribute('data-symbolic-name-dataType', dataType);
-		        			this.statmentReportDate.style.padding = '5px';
-		        			this.statmentReportDate.style.border = '1px solid #ccc';
-		        			this.statmentReportDate.style.borderRadius = '4px';
-		        			this.statmentReportDate.style.width = 'calc(100% - 60px)';
-		        			this.statmentReportDate.placeAt(inputContainer);
+		                	this.datField =  new dijit.form.DateTextBox({
+		        				constraints:{datePattern:'yyyy-MM-dd', strict:true,  max : new Date()},		        				 	
+		        			});		                			                	
 		                }
+		                this.datField.setAttribute('data-symbolic-name', symbolicName);
+	        			this.datField.setAttribute('data-symbolic-name-dataType', dataType);
+	        			this.datField.style.padding = '5px';
+	        			this.datField.style.border = '1px solid #ccc';
+	        			this.datField.style.borderRadius = '4px';
+	        			this.datField.style.width = 'calc(100% - 60px)';
+	        			this.datField.placeAt(inputContainer);
 		            }
 		        }
 		        if (element) {
@@ -537,7 +522,24 @@ define([
 		                    } else {
 		                        // Here, you add an additional check for input type 'date'
 		                        if(keyType === 'Date') {
-		                            searchProperties[key] = [statmentReportDate_Str, keyType];
+		                        	dateValue = "";
+		                        	if (cookie(ecm.model.Desktop.cookieCalendarType) == "UmmAlQura") {		                        		
+		                        		/*UmmAlQuraDate=  new dijit.form.DateTextBox({
+		    		        				datePackage:  "dojox.date.umalqura",
+		    		        				constraints:{datePattern:'yyyy-MM-dd', strict:true, max : new dojox.date.umalqura.Date()},
+		    		        				value : input.value,
+		    		        				
+		    		        				
+		    		        			});*/
+		                        		
+		                        		UmmAlQuraDate =   dojox.date.umalqura.locale.parse(input.value, {datePattern: "yyyy-MM-dd", selector: "date"});		                        		
+		                        		dateValue =  dojo.date.locale.format(new Date(UmmAlQuraDate.toGregorian()), {datePattern: "yyyy-MM-dd", selector: "date"});
+		                        		
+		                        	}else{
+		                        		dateValue =  dojo.date.locale.format(new Date(input.value), {datePattern: "yyyy-MM-dd", selector: "date"});
+		                        	}
+		                        	
+		                            searchProperties[key] = [dateValue, keyType];
 		                        } else {
 		                            // For other input types, use the value directly
 		                            searchProperties[key] = [input.value, keyType];

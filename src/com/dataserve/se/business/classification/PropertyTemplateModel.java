@@ -51,7 +51,6 @@ public class PropertyTemplateModel {
 						if ( bean.isChoiceList()){
 							propertyTemplateBean.setChoiceList(bean.isChoiceList());
 						}
-						System.out.println("ChoiceListBean>>>>>>>>>>>>>    "+bean.getChoiceListBeans());
 						if (bean.getChoiceListBeans() != null  && !bean.getChoiceListBeans().isEmpty()){
 							propertyTemplateBean.setChoiceListBeans(bean.getChoiceListBeans());
 						}
