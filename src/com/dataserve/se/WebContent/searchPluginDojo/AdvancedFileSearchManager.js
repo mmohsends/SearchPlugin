@@ -423,6 +423,8 @@ define([
 		    // Assume getCookie function exists or implement it to read cookie values
 		    var useUmmAlQuraCalendar = cookie(ecm.model.Desktop.cookieCalendarType) == "UmmAlQura"; // Placeholder for cookie check
 		    var statmentReportDate_Str;
+		    
+		    var dependentDropdownsMap = {};
 		    data.forEach(function(item, index) {
 					var dataType = item.dataType;
 					var symbolicName = item.symbolicName; // Define symbolicName here
@@ -446,19 +448,29 @@ define([
 						emptyElement.value = "";
 						emptyElement.textContent = "";
 						element.appendChild(emptyElement);
+
+						if (!item.depOn) {
+			                // Populate options for independent dropdowns
+			                item.choiceListBeans.forEach(function(option) {
+			                    var optionElement = document.createElement('option');
+			                    optionElement.value = option.value;
+			                    optionElement.textContent = option.dispName;
+			                    element.appendChild(optionElement);
+			                });
+			            } else {
+			                // Register dependent dropdowns for later population
+			                element.setAttribute('data-dep-on', item.depOn);
+			                dependentDropdownsMap[item.depOn] = dependentDropdownsMap[item.depOn] || [];
+			                dependentDropdownsMap[item.depOn].push(element);
+			                element.disabled =false; // Initially disable dependent dropdown
+			            }
 						
-						item.choiceListBeans.forEach(function(option) {
-							var optionElement = document.createElement('option');
-							optionElement.value = option.value;
-							optionElement.textContent = option.dispName;
-							element.appendChild(optionElement);
-						});
+						
 					} else {
 						if (["String", "Integer", "Float"].includes(dataType)) {
 							element = document.createElement('input');
 							element.type = 'text';		          
 						} else if (dataType === "Date") {
-//		                element = document.createElement('input');
 		                if (useUmmAlQuraCalendar) {
 		        			this.datField =  new dijit.form.DateTextBox({
 		        				datePackage:  "dojox.date.umalqura",
@@ -498,6 +510,35 @@ define([
 		        }
 		    });
 		   
+		    
+		    // Parent dropdown change event setup for dependent dropdowns
+		    Object.keys(dependentDropdownsMap).forEach(function(parentName) {
+		        var parentDropdown = container.querySelector(`select[data-symbolic-name="${parentName}"]`);
+		        parentDropdown.addEventListener('change', function() {
+		            var selectedValue = parentDropdown.value;
+		            dependentDropdownsMap[parentName].forEach(function(dependentDropdown) {
+		                dependentDropdown.innerHTML = ''; // Clear existing options
+		                var defaultOption = document.createElement('option');
+		                defaultOption.value = "";
+		                defaultOption.textContent = "";
+		                dependentDropdown.appendChild(defaultOption);
+
+		                var dependentData = data.find(d => d.symbolicName === dependentDropdown.getAttribute('data-symbolic-name'));
+		                if (dependentData) {
+		                    dependentData.choiceListBeans.forEach(option => {
+		                        if (option.depValue === selectedValue) { // Assuming you have a way to match options
+		                            var optionElement = document.createElement('option');
+		                            optionElement.value = option.value;
+		                            optionElement.textContent = option.dispName;
+		                            dependentDropdown.appendChild(optionElement);
+		                        }
+		                    });
+		                }
+		                dependentDropdown.disabled = false;
+		            });
+		        });
+		    });
+		    
 		    var submitButton = document.createElement('button');
 		    submitButton.textContent = this._lcl.SEARCH;
 		    submitButton.id = 'submitButton';
