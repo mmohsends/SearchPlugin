@@ -429,14 +429,16 @@ define([
 					var dataType = item.dataType;
 					var symbolicName = item.symbolicName; // Define symbolicName here
 					var choiceList = item.isChoiceList;
-					
-					var inputContainer = document.createElement('div');
-					inputContainer.style.flex = '1 1 45%';
-					inputContainer.style.marginBottom = '10px';
-					
+				
+			        var inputContainer = document.createElement('div');
+			        inputContainer.style.flexBasis = 'calc(50% - 10px)'; // Subtract 10px for margin
+			        inputContainer.style.marginBottom = '10px';
+			        inputContainer.style.marginRight = index % 2 === 0 ? '20px' : '0'; // Add margin to the right of the first input in a pair
+
 					var label = document.createElement('label');
 					label.textContent = item.displayName;
-					label.style.marginRight = '5px';
+					  label.style.display = 'block'; // label as block to appear on top
+				      label.style.margin = '5px';
 					inputContainer.appendChild(label);
 					
 					var element;
@@ -498,6 +500,11 @@ define([
 		            element.style.border = '1px solid #ccc';
 		            element.style.borderRadius = '4px';
 		            element.style.width = 'calc(100% - 60px)';
+		            if (element.tagName.toLowerCase() === 'select') {
+		                // Apply select-specific styles or logic here
+		                element.style.width = 'calc(100% - 48px)'; // Example style
+		                // Any additional logic for select elements can go here
+		            }
 		            inputContainer.appendChild(element);
 		        }
 		        rowDiv.appendChild(inputContainer);
