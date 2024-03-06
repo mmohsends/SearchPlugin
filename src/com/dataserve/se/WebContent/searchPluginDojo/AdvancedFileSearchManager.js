@@ -643,45 +643,52 @@ define([
 		/**
 		 * get class custom property
 		 */
-		getClassCustomPropertyData : function(symblolicName) {
-			params = {
-				method : "GetClassProperty",
-				repositoryId : ecm.model.desktop.getDefaultRepository().id,
-				classSymbolicName : symblolicName
-			};
+	getClassCustomPropertyData: function(symbolicName) {
+	    var params = {
+	        method: "GetClassProperty",
+	        repositoryId: ecm.model.desktop.getDefaultRepository().id,
+	        classSymbolicName: symbolicName
+	    };
 
-			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService",
-					params);
-			var resultSet = new ResultSet(response);
+	    var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
+	    var resultSet = new ResultSet(response);
 
-			var results = [];
-			if (!resultSet.result.startsWith("ERROR")) {
-				results = json.parse(resultSet.result, true);
-			} else {
-				
-				if (resultSet.result.includes("(ACCESS DENIED)")) {
-					this.toaster.redToaster(lcl.ACCESS_DENIED);						
-				}else  if(resultSet.result.includes("(FileNetException)")){
-					if(resultSet.result.includes("E_ACCESS_DENIED")){
-						this.toaster.redToaster(lcl.E_ACCESS_DENIED);
-					}else if(resultSet.result.includes("E_OBJECT_NOT_FOUND")){
-						this.toaster.redToaster(lcl.E_OBJECT_NOT_FOUND);
-					}
-					else if(resultSet.result.includes("E_BAD_CLASSID")){
-						this.toaster.redToaster(lcl.E_BAD_CLASSID);
-					}
-					else{
-						this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-					}
-				}
-				else {
-					this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
-				}
-				console.log("Failed to load data!");
-				console.log(resultSet);
-			}
-			return results;
-		},
+	    var results = [];
+	    if (!resultSet.result.startsWith("ERROR")) {
+	        results = json.parse(resultSet.result, true);
+
+	        // Sort the results array by symbolicName property
+	        results.sort(function(a, b) {
+	            if (a.symbolicName < b.symbolicName) {
+	                return -1;
+	            }
+	            if (a.symbolicName > b.symbolicName) {
+	                return 1;
+	            }
+	            return 0; // If a.symbolicName is equal to b.symbolicName
+	        });
+	    } else {
+	        if (resultSet.result.includes("(ACCESS DENIED)")) {
+	            this.toaster.redToaster(lcl.ACCESS_DENIED);                        
+	        } else if (resultSet.result.includes("(FileNetException)")) {
+	            if (resultSet.result.includes("E_ACCESS_DENIED")) {
+	                this.toaster.redToaster(lcl.E_ACCESS_DENIED);
+	            } else if (resultSet.result.includes("E_OBJECT_NOT_FOUND")) {
+	                this.toaster.redToaster(lcl.E_OBJECT_NOT_FOUND);
+	            } else if (resultSet.result.includes("E_BAD_CLASSID")) {
+	                this.toaster.redToaster(lcl.E_BAD_CLASSID);
+	            } else {
+	                this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
+	            }
+	        } else {
+	            this.toaster.redToaster(lcl.FAILED_TO_FETCH_DATA);
+	        }
+	        console.log("Failed to load data!");
+	        console.log(resultSet);
+	    }
+	    return results;
+	},
+
 		
 		
 		generalSearch :function(classSymbolicName,searchProperties){
