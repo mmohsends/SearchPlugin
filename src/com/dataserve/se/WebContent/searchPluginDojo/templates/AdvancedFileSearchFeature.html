@@ -1,7 +1,10 @@
-<div class="ecmCenterPane" style="width: 100%; height: 100%;">
+<div class="ecmCenterPane" style="width: 100%; height: 100%;"> 
     <div  data-dojo-type="dijit/layout/BorderContainer" style="width: 100%; height: 100%;">
 		<div data-dojo-type="dijit/layout/ContentPane"  data-dojo-props="region:'top'" >
+		
 		    <div style="margin-bottom: 10px; margin-top: 40px;" >
+		    	<div class="support_icon" data-dojo-type="dijit/layout/ContentPane"  data-dojo-attach-event="onClick:openOnlineHelp"></div>
+		    	
 		        <input type="text" data-dojo-type="dijit/form/TextBox" data-dojo-attach-point="searchInput"  placeholder=${_lcl.SEARCH_HOLDER} style="width: 60%;">
 		          <!-- Button for Search --> 
 			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:generalSearch" style="margin-left: 10px;">
@@ -15,6 +18,8 @@
 			    <button type="button"  data-dojo-type="dijit/form/Button" data-dojo-attach-event="onClick:openMostUsingDialog">
 			        ${_lcl.Most_Using}
 			    </button>
+			    
+			   
 		    </div>
 		   
 		</div>

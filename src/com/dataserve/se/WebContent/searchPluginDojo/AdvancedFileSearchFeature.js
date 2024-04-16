@@ -11,7 +11,7 @@ define([
 	"searchPluginDojo/LinkFileResultsManager",
 	
     "searchPluginDojo/AdvancedFileSearchResults",
-    
+    "helpPluginDojo/HelpDialog",
     "searchPluginDojo/Toaster",
 	"dojo/i18n!./nls/localization",
 	"dojo/text!./templates/AdvancedFileSearchFeature.html"
@@ -25,6 +25,7 @@ function(declare,
 		MostUsingDialog,
 		LinkFileResultsManager,
 		AdvancedFileSearchResults,
+		HelpDialog,
 		Toaster,
 		lcl,
 		template) {
@@ -167,7 +168,19 @@ function(declare,
 		    });
 		    this.mostUsingDialog.show(this);
 		},
-		
+		openOnlineHelp : function(){
+			
+			var _this = this;
+			params = {};
+			params.fitContentArea = true;
+			params.lockFullscreen= false;
+			params.parent = _this;
+			params.pageTitle = lcl.ADVANCED_SEARCH_FILE;
+			params.pdfFileName = "AdvancedFileSearchFeature";
+			var helpDialog = new HelpDialog(params);
+			helpDialog.show(_this);
+		},
+
 		
 		/**
 		 * clear home container when click to menu 
