@@ -176,7 +176,7 @@ function(declare,
 			params.lockFullscreen= false;
 			params.parent = _this;
 			params.pageTitle = lcl.ADVANCED_SEARCH_FILE;
-			params.pdfFileName = "AdvancedFileSearchFeature";
+			params.pdfFileName = "182_183_185_186";
 			var helpDialog = new HelpDialog(params);
 			helpDialog.show(_this);
 		},
