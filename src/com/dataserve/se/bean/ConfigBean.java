@@ -5,6 +5,7 @@ public class ConfigBean {
 	private String name;
 	private String value;
 	private String comment;
+	private boolean IsEncrypted ;
 
 	public String getName() {
 		return name;
@@ -29,5 +30,11 @@ public class ConfigBean {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+	public boolean IsEncrypted() {
+		return IsEncrypted;
+	}
 
+	public void setIsEncrypted(boolean isEncrypted) {
+		IsEncrypted = isEncrypted;
+	}
 }

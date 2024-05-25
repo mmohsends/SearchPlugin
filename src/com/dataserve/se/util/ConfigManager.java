@@ -31,10 +31,14 @@ public class ConfigManager {
 			ConfigDAO dao = new ConfigDAO(dbConnection);
 			Set<ConfigBean> beans = dao.fetchAllConfigs();
 			for (ConfigBean b : beans) {
-				props.put(b.getName(), b.getValue());
+				if(b.IsEncrypted() == true) {
+					props.put(b.getName(), EncryptionUtil.decrypt(b.getValue()));
+				}else {
+					props.put(b.getName(), b.getValue());
+				}
 			}
 			
-			if (props != null) {
+			if (beans != null && beans.size() > 0) {
 
 				
 				
