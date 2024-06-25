@@ -137,28 +137,6 @@ function(declare,
 			this.viewContainer.addChild(advancedFileSearchManager);
 			this.viewContainer.resize();
 		},
-			
-		
-//		generalSearch :function(){
-//			var searchValue = this.searchInput.value;
-//            if (typeof searchValue === 'string' && searchValue.trim().length === 0) {
-//            	this.toaster.redToaster(lcl.SEARCH_WORD_IS_REQUIRED);
-//        		return;
-//    		} 
-//            
-//			this.clearView();
-//			var params = {};
-//			_this=this;
-//			params.operation = 'generalSearch';
-//			//params.classSymbolicName='workwork';
-//			//params.searchProperties={};
-//
-//			params.searchWord = this.searchInput.value;
-//			params.parent=_this;
-//			var advancedFileSearchResults = new AdvancedFileSearchResults(params);
-//			this.viewContainer.addChild(advancedFileSearchResults);
-//			this.viewContainer.resize();;
-//		},
 		
 		generalSearch: function() {
 		    var searchValue = this.searchInput.value;
@@ -172,8 +150,6 @@ function(declare,
 		    var invalidParts = searchValue.match(sqlInjectionPattern);
 		    
 		    // Debugging: Log the input and the result of the match
-		    console.log("Search Value: ", searchValue);
-		    console.log("Invalid Parts: ", invalidParts);
 		    
 		    if (invalidParts && invalidParts.length > 0) {
 		        var invalidWords = invalidParts.join(', ');
