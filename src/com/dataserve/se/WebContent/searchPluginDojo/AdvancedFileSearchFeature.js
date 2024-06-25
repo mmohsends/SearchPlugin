@@ -9,6 +9,7 @@ define([
 	"searchPluginDojo/AdvancedFileSearchManager",
     "searchPluginDojo/MostUsingDialog",
 	"searchPluginDojo/LinkFileResultsManager",
+	 "ecm/model/ResultSet",
 	
     "searchPluginDojo/AdvancedFileSearchResults",
     "helpPluginDojo/HelpDialog",
@@ -24,6 +25,7 @@ function(declare,
 		AdvancedFileSearchManager,
 		MostUsingDialog,
 		LinkFileResultsManager,
+		ResultSet,
 		AdvancedFileSearchResults,
 		HelpDialog,
 		Toaster,
@@ -137,26 +139,85 @@ function(declare,
 		},
 			
 		
-		generalSearch :function(){
-			var searchValue = this.searchInput.value;
-            if (typeof searchValue === 'string' && searchValue.trim().length === 0) {
-            	this.toaster.redToaster(lcl.SEARCH_WORD_IS_REQUIRED);
-        		return;
-    		} 
-            
-			this.clearView();
-			var params = {};
-			_this=this;
-			params.operation = 'generalSearch';
-			//params.classSymbolicName='workwork';
-			//params.searchProperties={};
+//		generalSearch :function(){
+//			var searchValue = this.searchInput.value;
+//            if (typeof searchValue === 'string' && searchValue.trim().length === 0) {
+//            	this.toaster.redToaster(lcl.SEARCH_WORD_IS_REQUIRED);
+//        		return;
+//    		} 
+//            
+//			this.clearView();
+//			var params = {};
+//			_this=this;
+//			params.operation = 'generalSearch';
+//			//params.classSymbolicName='workwork';
+//			//params.searchProperties={};
+//
+//			params.searchWord = this.searchInput.value;
+//			params.parent=_this;
+//			var advancedFileSearchResults = new AdvancedFileSearchResults(params);
+//			this.viewContainer.addChild(advancedFileSearchResults);
+//			this.viewContainer.resize();;
+//		},
+		
+		generalSearch: function() {
+		    var searchValue = this.searchInput.value;
+		    if (typeof searchValue === 'string' && searchValue.trim().length === 0) {
+		        this.toaster.redToaster(lcl.SEARCH_WORD_IS_REQUIRED);
+		        return;
+		    }
+		    
+		    // Check for SQL injection patterns, including a wide range of SQL keywords
+		    var sqlInjectionPattern = /\b(SELECT|INSERT|UPDATE|DELETE|DROP|ALTER|CREATE|EXEC|UNION|FROM|WHERE|JOIN|INNER|OUTER|LEFT|RIGHT|FULL|CROSS|NATURAL|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|FETCH|ROW|ROWS|ONLY|DISTINCT|AS|INTO|VALUES|SET|ON|ALL|ANY|SOME|NOT|EXISTS|IN|LIKE|AND|OR|XOR|IS|NULL|NOT NULL|TRUE|FALSE|WITH|TABLE|DATABASE|SCHEMA|TRUNCATE|COMMENT|REVOKE|GRANT|PRIVILEGES|REFERENCES|CASCADE|RESTRICT|NO ACTION|SET DEFAULT|SET NULL|AFTER|BEFORE|TRIGGER|PROCEDURE|FUNCTION|INDEX|VIEW|CURSOR|LOCK|KEY|PRIMARY|FOREIGN|CONSTRAINT|CHECK|DEFAULT|IF|ELSE|ENDIF|CASE|WHEN|THEN|END|BEGIN|DECLARE|FETCH|WHILE|LOOP|REPEAT|UNTIL|DO|EXIT|GOTO|BREAK|CONTINUE|EXECUTE|PREPARE|DEALLOCATE|DESCRIBE|EXPLAIN|ANALYZE|SHOW|DESCRIBE|USE|ALTER|CALL|HANDLER|ITERATE|LEAVE|OPEN|CLOSE|DUMP|KILL|LOAD|RESET|PURGE|OPTIMIZE|ANALYZE|REPAIR|BACKUP|RESTORE|FLUSH|RESET|SHUTDOWN|START|STOP|SLAVE|MASTER|SYNC|DESCRIBE|EXPLAIN|ANALYZE)\b|(--|\/\*|\*\/|;|')/gi;
+		    var invalidParts = searchValue.match(sqlInjectionPattern);
+		    
+		    // Debugging: Log the input and the result of the match
+		    console.log("Search Value: ", searchValue);
+		    console.log("Invalid Parts: ", invalidParts);
+		    
+		    if (invalidParts && invalidParts.length > 0) {
+		        var invalidWords = invalidParts.join(', ');
+		        this.toaster.redToaster(lcl.INPUT_CONTENT_SEARCH_INVAILD + invalidWords);
+		        return; // Return the invalid search words
+		    }
+		    
+		    // Sanitize the input by escaping special characters (if necessary)
+		    searchValue = searchValue.replace(/'/g, "''");
 
-			params.searchWord = this.searchInput.value;
-			params.parent=_this;
-			var advancedFileSearchResults = new AdvancedFileSearchResults(params);
-			this.viewContainer.addChild(advancedFileSearchResults);
-			this.viewContainer.resize();;
+		    this.clearView();
+		    var params = {};
+		    var _this = this;
+		    params.operation = 'generalSearch';
+		    searchValue = this.EncryptKeyWord(searchValue)
+		    params.searchWord = searchValue;
+		    params.parent = _this;
+		    var advancedFileSearchResults = new AdvancedFileSearchResults(params);
+		    this.viewContainer.addChild(advancedFileSearchResults);
+		    this.viewContainer.resize();
 		},
+
+		
+		EncryptKeyWord: function(keywordSearch){
+			
+	      	params = {
+					method: "EncryptionUtilCommand",
+					"keywordSearch": keywordSearch,
+				};
+	             
+	 			var response = ecm.model.Request.invokeSynchronousPluginService("SearchPlugin", "AdvancedFileSearchService", params);
+	 			var resultSet = new ResultSet(response);
+	 			if(!resultSet.result.startsWith("ERROR")){
+	 				return resultSet.result ;
+	 			} else {
+	 				if (resultSet.result.includes("(ACCESS DENIED)")) {
+	 					this.toaster.redToaster(lcl.ACCESS_DENIED);						
+					} else {
+							this.toaster.redToaster(lcl.UNAVAILABLE);
+						}
+					}
+	 			return resultSet.result ;
+	 				console.log(resultSet);
+	 			},
 	
 		
 		openMostUsingDialog: function() {

@@ -29,6 +29,7 @@ define({
 	DOC_TITLE: "Document Title:",
 	Select_CLASSS: "Select Class",
 	SEARCH_WORD_IS_REQUIRED : "Search Words Required",
+	INPUT_CONTENT_SEARCH_INVAILD :"Invalid search input detected: ",
 
 	
 	E_ACCESS_DENIED : "The user have no permission to FN",

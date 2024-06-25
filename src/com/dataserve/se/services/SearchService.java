@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.dataserve.se.db.command.FileNetDateConverter;
+import com.dataserve.se.util.EncryptionUtil;
 import com.filenet.api.core.ObjectStore;
 import com.filenet.api.util.UserContext;
 import com.ibm.ecm.extension.PluginService;
@@ -108,6 +109,8 @@ public class SearchService  extends PluginService {
 				newQuery = buildAdvancedSearchQuery(os,classSymbolicName, searchProperties);
 			}if (operation.equals("generalSearch")){
 				String searchWord = request.getParameter(SEARCH_WORD);
+				searchWord=EncryptionUtil.decrypt(searchWord);
+//				System.err.print("searchWord decrypt"+searchWord);
 				newQuery = buildGeneralSearchQuery(os,searchWord);
 			}
 

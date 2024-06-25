@@ -28,7 +28,7 @@ define({
 	SEARCH_CONTENT: "بحث فى المحتوى",
 	Select_CLASSS: "اختار التصنيف ",
 	SEARCH_WORD_IS_REQUIRED : "كلمات البحث مطلوبة",
-
+	INPUT_CONTENT_SEARCH_INVAILD :"تم اكتشاف إدخال بحث غير صالح: ",
 	
 	E_ACCESS_DENIED : "المستخدم لايمتلك الصلاحيات على المحتوي الألكتروني",
 	E_OBJECT_NOT_FOUND : "العنصر غير موجود في المحتوى الألكتروني",
