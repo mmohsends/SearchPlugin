@@ -170,8 +170,7 @@ function(declare,
 			var requestParams = {};
 			requestParams.repositoryId = this.repository.id;
 			requestParams.repositoryType = this.repository.type;
-			requestParams.query = "SELECT * FROM Document where DocumentTitle LIKE '%" + this.args.searchKey +"%' ";
-			requestParams.classSymbolicName = 'SN_3234';
+			requestParams.searchWord = this.args.searchKey;
 			requestParams.searchProperties = {};
 			Request.invokePluginService("SearchPlugin", "LinkSearchService",
 				{

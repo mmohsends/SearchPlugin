@@ -38,8 +38,7 @@ public class LinkSearchService  extends PluginService {
 
 	public static final String REPOSITORY_ID = "repositoryId";
 	public static final String REPOSITORY_TYPE = "repositoryType";
-	public static final String QUERY = "query";
-	public static final String CLASS_SYMBOLIC_NAME= "classSymbolicName";
+	public static final String SEARCH_WORD= "searchWord"; 
 	/**
 	 * Returns the unique identifier for this service.
 	 * <p>
@@ -92,7 +91,8 @@ public class LinkSearchService  extends PluginService {
 
 			String repositoryId = request.getParameter(REPOSITORY_ID);
 			String repositoryType = request.getParameter(REPOSITORY_TYPE);
-			String query = request.getParameter(QUERY);
+			String searchWord = request.getParameter(SEARCH_WORD);
+			String query = buildSearchQuery(searchWord);
 			ObjectStore os = callbacks.getP8ObjectStore(repositoryId);
 			JSONResultSetResponse jsonResults = new JSONResultSetResponse();
 			jsonResults.setPageSize(50);
@@ -135,6 +135,8 @@ public class LinkSearchService  extends PluginService {
 			}
 		}
 
+		
+
 		private void writeResponse(HttpServletRequest request, HttpServletResponse response, JSONResultSetResponse json) throws Exception {
 			Writer writer = null;
 
@@ -172,4 +174,8 @@ public class LinkSearchService  extends PluginService {
 			}
 		}
 		
+		
+		private String buildSearchQuery(String searchWord) {
+			return "SELECT * FROM Document where DocumentTitle LIKE '%" + searchWord +"%' "; 
+		}
 	}
