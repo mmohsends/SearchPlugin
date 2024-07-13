@@ -113,7 +113,7 @@ function(declare,
 			var array = [];
 			array.push(DndRowMoveCopy);
 			array.push(DndFromDesktopAddDoc);
-//			array.push(RowContextMenu);
+			array.push(RowContextMenu);
 			return array;
 		},
 
