@@ -91,7 +91,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 	        LinkDocumentBean linkDocumentChild = fetchLinkByDocumentId(mainDocId);
 	        System.out.println("linkDocumentChild from get: " + linkDocumentChild.getFileId());
 
-	        String sql = "SELECT DMS_FILES_LINKS.FILE_ID, CHILD_FILE_ID, DOCUMENT_CLASS, DOCUMENT_NAME, CLASS_AR_NAME " +
+	        String sql = "SELECT DMS_FILES_LINKS.FILE_ID, DOCUMENT_ID , CHILD_FILE_ID, DOCUMENT_CLASS, DOCUMENT_NAME, CLASS_AR_NAME " +
 	                     "FROM DMS_FILES_LINKS " +
 	                     "LEFT JOIN DMS_FILES ON DMS_FILES_LINKS.CHILD_FILE_ID = DMS_FILES.FILE_ID " +
 	                     "LEFT JOIN CLASSIFICTIONS ON DMS_FILES.DOCUMENT_CLASS = CLASSIFICTIONS.SYMPOLIC_NAME " +
@@ -110,6 +110,7 @@ public class LinkDocumentDAO extends AbstractDAO{
 	            bean.setDocumentClass(rs.getString("DOCUMENT_CLASS"));
 	            bean.setDocumentName(rs.getString("DOCUMENT_NAME"));
 	            bean.setDocumentNameAr(rs.getString("CLASS_AR_NAME"));
+	            bean.setDocumentId(rs.getString("DOCUMENT_ID"));
 	            beans.add(bean);
 	        }
 

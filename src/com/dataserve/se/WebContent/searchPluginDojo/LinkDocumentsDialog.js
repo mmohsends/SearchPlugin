@@ -24,6 +24,7 @@ define([ "dojo/_base/declare",
 		"searchPluginDojo/Toaster",
         "dojox/grid/EnhancedGrid", 
         "dojo/data/ItemFileWriteStore",
+        "ecm/model/Desktop",
         "searchPluginDojo/LinkSearchResults",
 
 
@@ -54,6 +55,7 @@ define([ "dojo/_base/declare",
 		Toaster,
 		EnhancedGrid,
 		ItemFileWriteStore,
+		Desktop,
 		LinkSearchResults
 		) {
 
@@ -155,8 +157,18 @@ define([ "dojo/_base/declare",
 				
 			});
 			
+			var viewFileContent = this._lcl.VIEW_FILE_CONTENT;
+			this.viewBtn = new Button({
+				label : viewFileContent,
+				onClick : lang.hitch(this, function() {
+					this.viewFileContent();
+				}),
+				
+			});
+			
   		    this.gridBtn.addChild(this.linkBtn);
   		    this.gridBtn.addChild(this.removeBtn);
+  		  this.gridBtn.addChild(this.viewBtn);
 
 			
 		},
@@ -247,6 +259,8 @@ define([ "dojo/_base/declare",
 			        
   },
   
+
+  
   		getLikedDocument: function(){
   			var toaster = new Toaster();
 			var mainDocId = this.args.docGuid
@@ -324,11 +338,48 @@ define([ "dojo/_base/declare",
 			}
 		},
 
-			
-			
+	       viewFileContent: function(){
+	        	var toaster = new Toaster();
+	        	var _this = this;
+	        	var files = this.grid.selection.getSelected();
+	        	if (files.length == 0) {
+	        		toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+	        		return;
+	        	} else if (files.length > 1) {
+	        		toaster.redToaster(lcl.ONLY_ONE_FILE_CAN_BE_SELECTED_AT_A_TIME);
+	        		return;
+	        	}
+	        	params = {};
+	        	var url = "bookmark.jsp?desktop="+Desktop.id+"&repositoryId="+Desktop.defaultRepositoryId+"&docid={"+files[0].documentId+"}";
+				url = ecm.model.Request.appendSecurityToken(url);	
+				OpenWindowWithPostNewWindow(url, "width=1000, height=600, left=100, top=100, resizable=no, scrollbars=no", "ViewFileContent", params);
+	        }
+	      
 
-		
-    
+	    });
+
 	});
 
-});
+	function OpenWindowWithPostNewWindow (url, windowoption, name, params) {
+		 var form = document.createElement("form");
+		 form.setAttribute("method", "post");
+		 form.setAttribute("action", url);
+		 form.setAttribute("target", name);
+		 for (var i in params) {
+		   if (params.hasOwnProperty(i)) {
+		     var input = document.createElement('input');
+		     input.type = 'hidden';
+		     input.name = i;
+		     input.value = params[i];
+		     form.appendChild(input);
+		   }
+		 }
+		 document.body.appendChild(form);
+		 //note I am using a post.htm page since I did not want to make double request to the page
+		 //it might have some Page_Load call which might screw things up.
+		 var printWindow = window.open("", name, windowoption);
+		 form.submit();
+		 document.body.removeChild(form);
+		 
+	}
+    
