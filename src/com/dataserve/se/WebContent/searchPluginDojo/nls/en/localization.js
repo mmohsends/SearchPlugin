@@ -54,7 +54,7 @@ define({
 	PLEASE_SELECT_ONE_DOC: "Please select one document at least!",
 	OBJ_CREATED_DOC: "XX has been created successfully",
 	OBJ_DELETED_DOC: "XX has been deleted successfully",
-	VIEW_FILE_CONTENT: "View Selected Item",
+	VIEW_FILE_CONTENT: "File Preview",
 	ONLY_ONE_FILE_CAN_BE_SELECTED_AT_A_TIME : "Only One File Can Be view At A Time",
 
 	
