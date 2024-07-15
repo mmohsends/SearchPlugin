@@ -53,7 +53,7 @@ define({
 	PLEASE_SELECT_ONE_DOC: "!الرجاء تحديد وثيقه واحدة عالأقل",
 	OBJ_CREATED_DOC: "XX تم انشاء وثيقه",
 	OBJ_DELETED_DOC: "XX تم حذف وثيقه",
-	 VIEW_FILE_CONTENT: "استعراض الوثيقة",
+	VIEW_FILE_CONTENT: "استعراض الوثيقة المختارة",
 	 ONLY_ONE_FILE_CAN_BE_SELECTED_AT_A_TIME : "يمكن تحديد وثيقة واحد فقط في كل مرة",
 
 

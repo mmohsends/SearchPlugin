@@ -125,6 +125,7 @@ define([ "dojo/_base/declare",
 			this.setResizable(true);
 			this.setTitle(lcl.Link_Documents);
 			this.LinkAndDeleteBtn();
+//			this.viewButton.on("click", lang.hitch(this, this.viewSelectedItem));
 			this.LinkedDocument();			
 			this.logExit(methodName);
 		},
@@ -161,14 +162,14 @@ define([ "dojo/_base/declare",
 			this.viewBtn = new Button({
 				label : viewFileContent,
 				onClick : lang.hitch(this, function() {
-					this.viewFileContent();
+					this.viewSelectedItem();
 				}),
 				
 			});
 			
   		    this.gridBtn.addChild(this.linkBtn);
   		    this.gridBtn.addChild(this.removeBtn);
-  		  this.gridBtn.addChild(this.viewBtn);
+  		    this.gridViewBtn.addChild(this.viewBtn);
 
 			
 		},
@@ -338,7 +339,7 @@ define([ "dojo/_base/declare",
 			}
 		},
 
-	       viewFileContent: function(){
+		viewSelectedItem: function(){
 	        	var toaster = new Toaster();
 	        	var _this = this;
 	        	var files = this.grid.selection.getSelected();

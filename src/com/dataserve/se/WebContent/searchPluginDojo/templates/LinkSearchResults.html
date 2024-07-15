@@ -5,11 +5,15 @@
 			<div data-dojo-attach-point="repositorySelectorArea" class="sampleRepositorySelectorArea"></div>
 
 		</div>
+        <div data-dojo-attach-point="buttonArea" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+            <button data-dojo-attach-point="viewButton" data-dojo-type="dijit/form/Button">${_lcl.VIEW_FILE_CONTENT}</button>
+        </div>
 		<div data-dojo-attach-point="resultsArea" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
 			<div data-dojo-attach-point="searchResults" data-dojo-type="ecm/widget/listView/ContentList" 
 					data-dojo-props="emptyMessage:'${messages.folder_is_empty}', showCheckboxes :'true', multiSelect: 'multiple'">
 			</div>
 			
 		</div>
+	
 	</div>
 </div>

@@ -23,6 +23,9 @@ define([
 	"ecm/widget/listView/modules/ViewMagazine",
 	"ecm/widget/listView/modules/ViewFilmStrip",
 	"ecm/widget/CheckBox",
+	"searchPluginDojo/Toaster",
+	"ecm/model/Desktop",
+	"dojo/i18n!./nls/localization",
     "dojo/text!./templates/LinkSearchResults.html"
 ],
 
@@ -50,6 +53,9 @@ function(declare,
 		ViewMagazine,
 		ViewFilmStrip,
 		CheckBox,
+		Toaster,
+		Desktop,
+		lcl, 
 		template) {
 
 	return declare("searchPluginDojo.LinkSearchResults", [
@@ -59,6 +65,8 @@ function(declare,
 		/** @lends customSearchPluginDojo.CustomFeaturePane.prototype */
 		templateString: template,
 		widgetsInTemplate: true,
+		toaster: new Toaster(),
+		_lcl : lcl,
 		
 		constructor : function(args) {
 			
@@ -87,6 +95,8 @@ function(declare,
 			}
 			
 			this.runSearch();
+			  // Attach the button click event
+            this.viewButton.on("click", lang.hitch(this, this.viewSelectedItem));
 			this.logExit("postCreate");
 		},
 		
@@ -190,6 +200,51 @@ function(declare,
 		clear: function() {
 
 			this.searchResults.reset();
-		}
+		},
+
+		viewSelectedItem: function(){
+	        	var toaster = new Toaster();
+	        	var _this = this;
+	        	var files = this.searchResults.getSelectedItems();
+	        	if (files.length == 0) {
+	        		toaster.redToaster(lcl.PLEASE_SELECT_ONE_DOC);
+	        		return;
+	        	} else if (files.length > 1) {
+	        		toaster.redToaster(lcl.ONLY_ONE_FILE_CAN_BE_SELECTED_AT_A_TIME);
+	        		return;
+	        	}
+	        	 var selectedItem = files[0];
+	        	 var selectedItemDocId =selectedItem.attributeDisplayValues.ID;
+	        	params = {};
+	        	var url = "bookmark.jsp?desktop="+Desktop.id+"&repositoryId="+Desktop.defaultRepositoryId+"&docid="+selectedItemDocId;
+				url = ecm.model.Request.appendSecurityToken(url);	
+				OpenWindowWithPostNewWindow(url, "width=1000, height=600, left=100, top=100, resizable=no, scrollbars=no", "ViewFileContent", params);
+	        }
+	      
+
+	    });
+
 	});
-});
+
+	function OpenWindowWithPostNewWindow (url, windowoption, name, params) {
+		 var form = document.createElement("form");
+		 form.setAttribute("method", "post");
+		 form.setAttribute("action", url);
+		 form.setAttribute("target", name);
+		 for (var i in params) {
+		   if (params.hasOwnProperty(i)) {
+		     var input = document.createElement('input');
+		     input.type = 'hidden';
+		     input.name = i;
+		     input.value = params[i];
+		     form.appendChild(input);
+		   }
+		 }
+		 document.body.appendChild(form);
+		 //note I am using a post.htm page since I did not want to make double request to the page
+		 //it might have some Page_Load call which might screw things up.
+		 var printWindow = window.open("", name, windowoption);
+		 form.submit();
+		 document.body.removeChild(form);
+		 
+	}
