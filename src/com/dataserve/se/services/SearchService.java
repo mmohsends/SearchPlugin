@@ -3,13 +3,15 @@ package com.dataserve.se.services;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
-
+import java.util.Set;
 import java.util.zip.GZIPOutputStream;
 
 import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dataserve.se.bean.ClassificationBean;
+import com.dataserve.se.db.ClassificationDAO;
 import com.dataserve.se.db.command.FileNetDateConverter;
 import com.dataserve.se.util.EncryptionUtil;
 import com.filenet.api.core.ObjectStore;
@@ -219,26 +221,47 @@ public class SearchService  extends PluginService {
 		
 		private String buildGeneralSearchQuery(ObjectStore os, String searchWord) {
 //			StringBuilder stringBuilder = new StringBuilder();
-//	       
-//	        stringBuilder.append("[");
-//	        stringBuilder.append("DocumentTitle");
-//	        stringBuilder.append("]");
-//	        stringBuilder.append(" like ");
-//	        stringBuilder.append("'%");
-//	        stringBuilder.append(searchWord);
-//	        stringBuilder.append("%'");
-	          
-	        return " SELECT d.[Name],d.[LockOwner],d.[ClassDescription],d.[CompoundDocumentState],d.[ContentSize],d.[Creator],d.[DateCreated],d.[DateLastModified],d.[DocumentTitle],d.[Id],d.[IsCurrentVersion],d.[IsReserved],d.[IsVersioningEnabled],d.[LastModifier],d.[MajorVersionNumber],d.[MimeType],d.[MinorVersionNumber],d.[Owner],d.[ReplicationGroup],d.[Reservation],d.[ReservationType],d.[VersionSeries],d.[VersionStatus] "
-	        		+ " FROM Document d "
-	        		+ " INNER JOIN ContentSearch cs on d.This = cs.QueriedObject "
-	        		+ " WHERE CONTAINS(d.*," + "'" + searchWord + "'" + ")" + " AND d.[VersionStatus] = 1 " ;
-	        		//+ " ORDER BY cs.[Rank] DESC";
-//	        		"SELECT   [ContentSize], [Creator], [DateCreated],[LockOwner],[LastModifier],[MajorVersionNumber],[MinorVersionNumber],[ReservationType],[MimeType],[ClassDescription],[DateLastModified], [DocumentTitle],  [Id], [Name]"
-//	        		+ " FROM Document T "
-//	        		+ "INNER JOIN ContentSearch cs ON T.This = cs.QueriedObject " 
-//	        		+ "WHERE CONTAINS(*," + "'" + searchWord + "'" + ")" ;
-	       // + " OR " + stringBuilder;
-		    		
-	}
+//		       
+//		        stringBuilder.append("[");
+//		        stringBuilder.append("DocumentTitle");
+//		        stringBuilder.append("]");
+//		        stringBuilder.append(" like ");
+//		        stringBuilder.append("'%");
+//		        stringBuilder.append(searchWord);
+//		        stringBuilder.append("%'");
+				String isofClasses = "";
+				try {
+					ClassificationDAO dao = new ClassificationDAO();
+					Set<ClassificationBean> beans = dao.fetchTopLevelFNAddedClassifications();
+					if (beans !=null && beans.size() >0) {
+						isofClasses = " AND ( " ;
+						int i=0;
+						for (ClassificationBean classificationBean : beans) {
+							if(i > 0) {
+								isofClasses += " OR ";
+							}
+							isofClasses += " IsOfClass(d, "
+									+ classificationBean.getSymbolicName()
+									+ ") ";
+							i++;
+						}
+						 
+						isofClasses += " ) ";
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+		        String SQL =  " SELECT d.[Name],d.[LockOwner],d.[ClassDescription],d.[CompoundDocumentState],d.[ContentSize],d.[Creator],d.[DateCreated],d.[DateLastModified],d.[DocumentTitle],d.[Id],d.[IsCurrentVersion],d.[IsReserved],d.[IsVersioningEnabled],d.[LastModifier],d.[MajorVersionNumber],d.[MimeType],d.[MinorVersionNumber],d.[Owner],d.[ReplicationGroup],d.[Reservation],d.[ReservationType],d.[VersionSeries],d.[VersionStatus] "
+		        		+ " FROM Document d "
+		        		+ " INNER JOIN ContentSearch cs on d.This = cs.QueriedObject "
+		        		+ " WHERE CONTAINS(d.*," + "'" + searchWord + "'" + ")" + " AND d.[VersionStatus] = 1 "
+		        				+  isofClasses;
+//		        System.out.println(" Content Search " + SQL);
+		        return SQL;
+		        		//+ " ORDER BY cs.[Rank] DESC";
+
+			    		
+		}
 		
 	}

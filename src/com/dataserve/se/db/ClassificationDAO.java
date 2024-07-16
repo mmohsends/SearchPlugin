@@ -375,6 +375,31 @@ public class ClassificationDAO extends AbstractDAO{
 		}
 	}
 	
-
+	public Set<ClassificationBean> fetchTopLevelFNAddedClassifications() throws DatabaseException {
+		try {
+			stmt = con.prepareStatement("SELECT CLASSIFICATION_ID, CLASS_AR_NAME, CLASS_EN_NAME, SYMPOLIC_NAME, PARENT_ID, CLASS_CODE, SAVE_TYPE "
+					+ "	FROM CLASSIFICTIONS WHERE is_fn_added = 1 and (PARENT_ID IS NULL OR  PARENT_ID = 0)");		
+			rs = stmt.executeQuery();
+			Set<ClassificationBean> beans = new LinkedHashSet<ClassificationBean>();			
+			while (rs.next()) {
+				ClassificationBean bean = new ClassificationBean();
+				bean.setId(rs.getInt("CLASSIFICATION_ID"));
+				bean.setNameAr(rs.getString("CLASS_AR_NAME"));
+				bean.setNameEn(rs.getString("CLASS_EN_NAME"));
+				bean.setSymbolicName(rs.getString("SYMPOLIC_NAME"));
+				bean.setParentID(rs.getInt("PARENT_ID"));
+				bean.setClassCode(rs.getString("CLASS_CODE"));
+				bean.setSaveTypeId(rs.getInt("SAVE_TYPE"));
+//				bean.setChildrenIds(getFNAddedChildrenIds(bean.getId()));
+				beans.add(bean);
+			}
+			return beans;
+		} catch (SQLException e) {
+			throw new DatabaseException("Error fetching record from table CLASSIFICTIONS", e);
+		} finally {
+			safeClose();
+			releaseResources();
+		}
+	}
 
 }
