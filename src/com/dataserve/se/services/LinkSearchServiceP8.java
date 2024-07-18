@@ -52,7 +52,7 @@ import com.ibm.json.java.JSONObject;
  * JavaScript model class. This class provides the structure and rows for the ecm.widget.listView.ContentList DOJO
  * widget.
  */
-public class SamplePluginLinkSearchServiceP8 {
+public class LinkSearchServiceP8 {
 	public static final int pageSize = 50;
 
 	/**

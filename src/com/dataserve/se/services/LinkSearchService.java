@@ -107,12 +107,12 @@ public class LinkSearchService  extends PluginService {
 				if (synchObject != null) {
 					synchronized (synchObject) {
 						 if (repositoryType.equals("p8")) {
-							 SamplePluginLinkSearchServiceP8.executeP8Search(request, repositoryId, query, callbacks, jsonResults, request.getLocale());
+							 LinkSearchServiceP8.executeP8Search(request, repositoryId, query, callbacks, jsonResults, request.getLocale());
 						}
 					}
 				} else {
 					 if (repositoryType.equals("p8")) {
-						 SamplePluginLinkSearchServiceP8.executeP8Search(request, repositoryId, query, callbacks, jsonResults, request.getLocale());
+						 LinkSearchServiceP8.executeP8Search(request, repositoryId, query, callbacks, jsonResults, request.getLocale());
 					}
 				}
 
