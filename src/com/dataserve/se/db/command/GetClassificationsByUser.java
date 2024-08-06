@@ -27,7 +27,7 @@ public class GetClassificationsByUser extends CommandBase {
 			}
 			
 			Set<ClassificationModel> classifications;
-			if (ConfigManager.getSuperUserName().equals(currentUserId)) {
+			if (isValuePresent(ConfigManager.getSuperUserName(), currentUserId)) {
 				classifications = ClassificationModel.getFNAddedClassifications();
 			} else {
 				UserManager userManager = new  UserManager() ;
